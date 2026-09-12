@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="description"
+      content="MRTC Calendar - events, activities, deadlines and schedule for MRTC. Open to everyone, no sign-in required."
+    />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0e12" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>MRTC Calendar</title>
+    <!-- Applies the saved theme before first paint, so there is no flash.
+         A separate file rather than an inline script keeps the CSP strict. -->
+    <script src="/theme-init.js"></script>
+  </head>
+  <body class="h-full">
+    <div id="root" class="min-h-full"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

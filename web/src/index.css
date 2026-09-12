@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   Two deliberate palettes. Dark mode is not an inversion: surfaces are warmer
+   near-blacks, the accent is lifted so it stays legible, and borders are
+   brightened rather than darkened.
+   --------------------------------------------------------------------------- */
+:root {
+  --canvas: 249 250 251;
+  --surface: 255 255 255;
+  --raised: 244 246 249;
+  --hairline: 228 231 236;
+  --edge: 209 214 222;
+  --ink: 17 24 39;
+  --muted: 92 101 116;
+  --faint: 138 147 161;
+  --accent: 37 82 200;
+  --accent-ink: 255 255 255;
+  --accent-wash: 235 241 254;
+  --shadow: 15 23 42;
+}
+
+.dark {
+  --canvas: 12 14 18;
+  --surface: 22 25 31;
+  --raised: 30 34 42;
+  --hairline: 41 46 56;
+  --edge: 58 65 78;
+  --ink: 232 236 243;
+  --muted: 152 161 176;
+  --faint: 118 127 142;
+  --accent: 125 165 255;
+  --accent-ink: 10 17 34;
+  --accent-wash: 25 35 58;
+  --shadow: 0 0 0;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+  }
+
+  /* A single, consistent focus ring across the product. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent/60 ring-offset-2 ring-offset-canvas;
+  }
+
+  ::selection {
+    background-color: rgb(var(--accent) / 0.22);
+  }
+
+  /* Respect a reader who asks for less motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-hairline bg-surface shadow-card;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-2xs font-medium leading-none;
+  }
+
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-1.5 rounded-lg border text-sm font-medium
+           transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-md {
+    @apply h-9 px-3.5;
+  }
+
+  .btn-sm {
+    @apply h-8 px-2.5 text-[0.8125rem];
+  }
+
+  .btn-primary {
+    @apply border-transparent bg-accent text-accent-ink hover:bg-accent/90 active:bg-accent/95;
+  }
+
+  .btn-ghost {
+    @apply border-transparent text-muted hover:bg-raised hover:text-ink;
+  }
+
+  .btn-outline {
+    @apply border-edge bg-surface text-ink hover:bg-raised;
+  }
+
+  .btn-danger {
+    @apply border-transparent bg-rose-600 text-white hover:bg-rose-700;
+  }
+
+  .field {
+    @apply w-full rounded-lg border border-edge bg-surface px-3 py-2 text-sm text-ink
+           placeholder:text-faint focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-2xs font-semibold uppercase tracking-wider text-muted;
+  }
+
+  .section-title {
+    @apply text-2xs font-semibold uppercase tracking-[0.09em] text-faint;
+  }
+
+  /* Thin, unobtrusive scrollbars inside the calendar's scrolling panes. */
+  .scroll-slim {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--edge)) transparent;
+  }
+
+  .scroll-slim::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scroll-slim::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--edge));
+    border-radius: 9999px;
+  }
+
+  .scroll-slim::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
