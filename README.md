@@ -80,6 +80,18 @@ start in production without one.
 | `npm run typecheck` | TypeScript across both workspaces |
 | `npm run seed` | Seed a fresh database |
 | `npm run reset` | Delete the local database and uploads (development only) |
+| `npm run build:demo` | Build the server-free demo (see below) |
+
+### Shareable demo build
+
+`npm run build:demo` produces `web/demo-dist/` — the same client with the
+Calendar API replaced by an in-browser store (`web/demo/`) and hash routing, so
+it can be opened from any static host with no server behind it. Useful for
+showing the product to faculty or a committee before anything is deployed.
+
+It is a preview, not the product: data is sample content, every change lives in
+the browser tab until reload, and the real authorization rules are enforced by
+the server, not by the demo. The page says so at the top.
 
 ### Default accounts
 

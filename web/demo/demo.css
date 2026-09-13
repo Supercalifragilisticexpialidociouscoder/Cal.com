@@ -1,0 +1,8 @@
+/* The artifact host paints its own surface behind the page, so the demo sets
+   an explicit background rather than inheriting a transparent body. */
+html,
+body,
+#root {
+  min-height: 100%;
+  background-color: rgb(var(--canvas));
+}

@@ -18,7 +18,8 @@
     "start": "npm run start --workspace server",
     "typecheck": "npm run typecheck --workspace server && npm run typecheck --workspace web",
     "seed": "npm run seed --workspace server",
-    "reset": "npm run reset --workspace server"
+    "reset": "npm run reset --workspace server",
+    "build:demo": "npm run build:demo --workspace web"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
