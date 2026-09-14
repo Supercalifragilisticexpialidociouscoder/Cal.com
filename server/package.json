@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "private": true,
-  "description": "MRTC Calendar API",
+  "description": "Infin8 Calendar API",
   "type": "commonjs",
   "main": "dist/index.js",
   "scripts": {

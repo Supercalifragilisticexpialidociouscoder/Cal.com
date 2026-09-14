@@ -78,13 +78,13 @@ export function ensureSeedData(): void {
 
   seed();
 
-  console.log('[mrtc-calendar] database prepared.');
-  console.log(`[mrtc-calendar] super admin: ${config.seed.superAdmin.email}`);
+  console.log('[infin8-calendar] database prepared.');
+  console.log(`[infin8-calendar] super admin: ${config.seed.superAdmin.email}`);
   for (const staff of config.seed.staff) {
-    console.log(`[mrtc-calendar] staff admin: ${staff.email}`);
+    console.log(`[infin8-calendar] staff admin: ${staff.email}`);
   }
   if (!config.isProduction) {
-    console.log('[mrtc-calendar] seed passwords come from .env - change them before going live.');
+    console.log('[infin8-calendar] seed passwords come from .env - change them before going live.');
   }
 }
 
@@ -592,5 +592,5 @@ function seedDemoEvents(): void {
 if (require.main === module) {
   getDb();
   ensureSeedData();
-  console.log('[mrtc-calendar] seed complete.');
+  console.log('[infin8-calendar] seed complete.');
 }

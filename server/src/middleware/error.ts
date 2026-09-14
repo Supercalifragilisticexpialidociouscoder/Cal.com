@@ -52,7 +52,7 @@ export function errorHandler(
   }
 
   // Genuinely unexpected: log for the operator, stay friendly for the user.
-  console.error('[mrtc-calendar] unhandled error:', err);
+  console.error('[infin8-calendar] unhandled error:', err);
   res.status(500).json({
     error: {
       code: 'server_error',

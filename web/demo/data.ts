@@ -50,9 +50,9 @@ export interface SeedUser {
 }
 
 export const USERS: SeedUser[] = [
-  { id: 1, name: 'MRTC Super Admin', email: 'admin@mrtc.edu', password: 'mrtc-super-admin', role: 'super_admin' },
-  { id: 2, name: 'Staff Admin One', email: 'staff1@mrtc.edu', password: 'mrtc-staff-one', role: 'staff_admin' },
-  { id: 3, name: 'Staff Admin Two', email: 'staff2@mrtc.edu', password: 'mrtc-staff-two', role: 'staff_admin' },
+  { id: 1, name: 'MRTC Super Admin', email: 'admin@mrtc.edu', password: 'infin8-super-admin', role: 'super_admin' },
+  { id: 2, name: 'Staff Admin One', email: 'staff1@mrtc.edu', password: 'infin8-staff-one', role: 'staff_admin' },
+  { id: 3, name: 'Staff Admin Two', email: 'staff2@mrtc.edu', password: 'infin8-staff-two', role: 'staff_admin' },
 ];
 
 export interface SeedResponsibility {

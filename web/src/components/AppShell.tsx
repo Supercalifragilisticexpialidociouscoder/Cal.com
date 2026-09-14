@@ -91,11 +91,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               aria-hidden="true"
               className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-accent text-[0.6875rem] font-bold text-accent-ink"
             >
-              M
+              i8
             </span>
             <span className="min-w-0">
               <span className="block truncate text-sm font-semibold leading-tight text-ink">
-                MRTC Calendar
+                Infin8 Calendar
               </span>
               <span className="hidden text-2xs leading-tight text-muted sm:block">
                 Events &middot; Activities &middot; Deadlines &middot; Schedule
@@ -328,7 +328,7 @@ function Footer({ isAdmin }: { isAdmin: boolean }) {
   return (
     <footer className="mt-8 border-t border-hairline bg-surface/60">
       <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 pb-24 text-xs text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:pb-5">
-        <p>MRTC Calendar &middot; Everyone can see what is happening at MRTC.</p>
+        <p>Infin8 Calendar &middot; Everyone can see what is happening at MRTC.</p>
         <div className="flex items-center gap-3">
           <Link to="/upcoming" className="transition-colors hover:text-ink">
             Upcoming

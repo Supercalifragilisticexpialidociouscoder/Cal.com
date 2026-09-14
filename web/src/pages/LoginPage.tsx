@@ -55,11 +55,11 @@ export function LoginPage() {
           aria-hidden="true"
           className="mx-auto mb-3 grid h-10 w-10 place-items-center rounded-xl bg-accent text-sm font-bold text-accent-ink"
         >
-          M
+          i8
         </span>
         <h1 className="text-lg font-semibold tracking-tight text-ink">Administrator sign in</h1>
         <p className="mt-1 text-sm text-muted">
-          The MRTC Calendar is open to everyone. Sign in only to manage events.
+          The Infin8 Calendar is open to everyone. Sign in only to manage events.
         </p>
       </div>
 

@@ -1,7 +1,7 @@
 /* Runs before the app loads to prevent a light/dark flash on first paint. */
 (function () {
   try {
-    var stored = localStorage.getItem('mrtc-theme');
+    var stored = localStorage.getItem('infin8-theme');
     var mode = stored === 'light' || stored === 'dark' ? stored : 'system';
     var dark =
       mode === 'dark' ||

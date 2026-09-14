@@ -2,7 +2,7 @@
   "name": "web",
   "version": "1.0.0",
   "private": true,
-  "description": "MRTC Calendar web client",
+  "description": "Infin8 Calendar web client",
   "type": "module",
   "scripts": {
     "dev": "vite",

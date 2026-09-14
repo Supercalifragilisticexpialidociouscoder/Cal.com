@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthValue | null>(null);
  * Its only job is to tell the client that asking /auth/me is worthwhile, so a
  * student opening the calendar makes no authentication request at all (spec 36).
  */
-const HINT_COOKIE = 'mrtc_session_hint';
+const HINT_COOKIE = 'infin8_session_hint';
 
 function hasSessionHint(): boolean {
   return document.cookie.split('; ').some((entry) => entry.startsWith(`${HINT_COOKIE}=`));

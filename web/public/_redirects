@@ -1,0 +1,4 @@
+# The client is a single page app: every unknown path serves index.html so deep
+# links such as /calendar and /events/12 resolve. /api is handled earlier by the
+# Pages Function, which takes precedence over these rules.
+/*    /index.html   200

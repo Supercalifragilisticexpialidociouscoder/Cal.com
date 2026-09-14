@@ -1,5 +1,5 @@
 -- ---------------------------------------------------------------------------
--- MRTC Calendar schema
+-- Infin8 Calendar schema
 --
 -- Deliberately small and relational. Deadlines are events with
 -- event_type = 'deadline' rather than a parallel table, so every calendar

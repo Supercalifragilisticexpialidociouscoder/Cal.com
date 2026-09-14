@@ -982,7 +982,7 @@ function handle(method: string, path: string, params: URLSearchParams, body: Bod
     throw new HttpError(403, 'forbidden', 'Organiser and venue changes are disabled in the demo.');
   }
 
-  if (path === '/health') return { ok: true, service: 'mrtc-calendar-demo' };
+  if (path === '/health') return { ok: true, service: 'infin8-calendar-demo' };
 
   throw notFound(`No API route matches ${method} ${path}.`);
 }

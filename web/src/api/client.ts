@@ -54,7 +54,7 @@ export async function api<T>(path: string, options: RequestOptions = {}): Promis
   const headers: Record<string, string> = {
     Accept: 'application/json',
     // Required by the server's CSRF guard on every state changing request.
-    'X-Requested-With': 'mrtc-calendar',
+    'X-Requested-With': 'infin8-calendar',
   };
   if (body !== undefined && !formData) headers['Content-Type'] = 'application/json';
 

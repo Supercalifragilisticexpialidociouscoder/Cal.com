@@ -64,7 +64,7 @@ export function UpcomingPage() {
             events={events}
             today={today}
             emptyTitle="Nothing is scheduled yet."
-            emptyBody="When events are added to the MRTC calendar, they will show up here."
+            emptyBody="When events are added to the Infin8 Calendar, they will show up here."
             emptyAction={
               <Link to="/calendar" className="btn btn-sm btn-outline">
                 Open calendar

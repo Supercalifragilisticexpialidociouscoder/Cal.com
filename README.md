@@ -1,4 +1,4 @@
-# MRTC Calendar
+# Infin8 Calendar
 
 The centralized event, schedule, responsibility and planning calendar for MRTC.
 
@@ -70,6 +70,10 @@ npm start         # one process serves the API and the built client
 Set `NODE_ENV=production` and a strong `SESSION_SECRET`; the server refuses to
 start in production without one.
 
+That single process is the simplest deployment: put it on any host that runs
+Node with a persistent disk. See **Deployment** below for the split setup
+across Cloudflare Pages and a Node host.
+
 ### Other commands
 
 | Command | What it does |
@@ -100,9 +104,9 @@ before any real deployment.**
 
 | Role | Email | Password (default) |
 |---|---|---|
-| Super Admin | `admin@mrtc.edu` | `mrtc-super-admin` |
-| Staff Admin | `staff1@mrtc.edu` | `mrtc-staff-one` |
-| Staff Admin | `staff2@mrtc.edu` | `mrtc-staff-two` |
+| Super Admin | `admin@mrtc.edu` | `infin8-super-admin` |
+| Staff Admin | `staff1@mrtc.edu` | `infin8-staff-one` |
+| Staff Admin | `staff2@mrtc.edu` | `infin8-staff-two` |
 
 Sign in from the discreet **Admin Login** link in the footer, or at `/login`.
 Either the full email or just the part before the `@` works as the username.
@@ -116,7 +120,7 @@ A plain two-workspace monorepo. The client only ever talks to a same-origin
 the API process), so no base URL needs configuring anywhere.
 
 ```
-MRTC Calendar (React SPA)
+Infin8 Calendar (React SPA)
         ↓  /api
 Calendar API (Express + SQLite)
         ↓
@@ -173,7 +177,7 @@ today's events immediately.
 
 - The public landing page is **one request** (`/api/overview`).
 - Administration is code-split; a public visitor never downloads it.
-- A value-free `mrtc_session_hint` cookie lets the client skip the
+- A value-free `infin8_session_hint` cookie lets the client skip the
   authentication request entirely when nobody is signed in.
 - Public responses carry short `Cache-Control` lifetimes; admin responses are
   `no-store`.
@@ -184,6 +188,82 @@ today's events immediately.
 First public load is roughly **95 KB gzipped** of JavaScript and CSS.
 
 ---
+
+## Deployment
+
+The API is a Node process that owns a SQLite file and an uploads folder, so it
+needs a host that **runs a server and keeps a disk**. Static hosts cannot run
+it. There are two shapes that work.
+
+### One process (simplest)
+
+Build, then run `npm start` on any Node host with a persistent volume mounted
+at `DATA_DIR`. The same process serves the API and the built client, so there
+is nothing to wire together.
+
+### Cloudflare Pages + a Node host (what this repo is configured for)
+
+```
+browser ──▶ Cloudflare Pages          static client (web/dist)
+               │  /api/*
+               ▼
+          Pages Function              functions/api/[[path]].ts
+               │
+               ▼
+          Node host                   the API + SQLite on a persistent disk
+```
+
+**Why `/api` is proxied rather than called directly.** The session cookie is
+`SameSite=Lax`, and browsers do not send Lax cookies on cross-site requests. If
+the client called the API host directly, every admin request would arrive
+signed out. Routing `/api` through the Pages domain keeps client and API on one
+origin, so the cookie works and the CSRF design is untouched — no third-party
+cookies, no `SameSite=None`.
+
+**1. The API.** Build the image and deploy it anywhere that takes a container
+(Render, Fly.io, Railway, a VPS):
+
+```bash
+docker build -t infin8-calendar-api .
+```
+
+Required configuration:
+
+| Variable | Value |
+|---|---|
+| `NODE_ENV` | `production` |
+| `SESSION_SECRET` | a long random string — the server refuses to start without one |
+| `CORS_ORIGINS` | your Pages URL, e.g. `https://infin8-calendar.pages.dev` |
+| `DATA_DIR` | `/data`, with a **persistent disk mounted there** |
+
+Without that disk the calendar is wiped on every restart. `/api/health` is a
+ready-made health check.
+
+**2. The client.** In the Cloudflare Pages project:
+
+| Setting | Value |
+|---|---|
+| Build command | `npm run build:web` |
+| Build output directory | taken from `wrangler.toml` (`web/dist`) |
+| Environment variable | `API_ORIGIN` = the API's base URL |
+
+`wrangler.toml` sets the output directory, and `web/public/_redirects` gives the
+single page app its deep links. If `API_ORIGIN` is unset the proxy returns a
+readable message rather than failing silently.
+
+### Troubleshooting
+
+**"Output directory 'dist' not found."** The client builds to `web/dist`, not
+`dist`. `wrangler.toml` now declares this; if the Pages project still has an
+explicit output directory set in its dashboard, clear it or set it to
+`web/dist`.
+
+**The site loads but no events appear, or admin sign-in does nothing.** The
+client reached Pages but `/api` did not reach the API. Check `API_ORIGIN` in the
+Pages project, and that the API is up at `<API_ORIGIN>/api/health`.
+
+**Sign-in returns "This request came from an unrecognised origin."** Add the
+Pages URL to `CORS_ORIGINS` on the API and restart it.
 
 ## Security
 
@@ -239,7 +319,7 @@ keeps the page a short personal list rather than a copy of every task.
 ## API
 
 All routes are under `/api`. Mutating requests need the
-`X-Requested-With: mrtc-calendar` header.
+`X-Requested-With: infin8-calendar` header.
 
 ### Public
 
