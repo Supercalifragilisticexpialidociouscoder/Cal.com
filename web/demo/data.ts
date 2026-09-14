@@ -49,10 +49,17 @@ export interface SeedUser {
   role: 'super_admin' | 'staff_admin';
 }
 
+/**
+ * Demo identities, deliberately not the real administrator accounts.
+ *
+ * The demo checks these in the browser, so they ship inside the published
+ * bundle where anyone can read them. Real credentials must never appear here -
+ * these exist only so the demo can show the administrator experience.
+ */
 export const USERS: SeedUser[] = [
-  { id: 1, name: 'MRTC Super Admin', email: 'admin@mrtc.edu', password: 'infin8-super-admin', role: 'super_admin' },
-  { id: 2, name: 'Staff Admin One', email: 'staff1@mrtc.edu', password: 'infin8-staff-one', role: 'staff_admin' },
-  { id: 3, name: 'Staff Admin Two', email: 'staff2@mrtc.edu', password: 'infin8-staff-two', role: 'staff_admin' },
+  { id: 1, name: 'Demo Super Admin', email: 'admin@demo.cal8', password: 'demo-super-admin', role: 'super_admin' },
+  { id: 2, name: 'Demo Staff One', email: 'staff1@demo.cal8', password: 'demo-staff-one', role: 'staff_admin' },
+  { id: 3, name: 'Demo Staff Two', email: 'staff2@demo.cal8', password: 'demo-staff-two', role: 'staff_admin' },
 ];
 
 export interface SeedResponsibility {

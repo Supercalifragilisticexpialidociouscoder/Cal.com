@@ -110,7 +110,17 @@ export function createApp(): express.Express {
 
 function start(): void {
   getDb();
-  ensureSeedData();
+
+  try {
+    ensureSeedData();
+  } catch (error) {
+    // Setup problems are configuration mistakes, not crashes: say what is
+    // wrong and what to do in plain text, without a stack trace on top of it.
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('\n[infin8-calendar] Cannot start.\n');
+    console.error(`  ${message}\n`);
+    process.exit(1);
+  }
 
   const app = createApp();
   const server = app.listen(config.port, () => {

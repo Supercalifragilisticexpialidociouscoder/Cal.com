@@ -22,7 +22,7 @@ function findUserByIdentifier(identifier: string): UserRow | undefined {
     .get(value) as UserRow | undefined;
   if (exact) return exact;
 
-  // Allow signing in with just the local part ("admin" for admin@mrtc.edu).
+  // Allow signing in with just the local part ("abhi" for abhi@admin.cal8).
   if (!value.includes('@') && value.length > 0) {
     return db
       .prepare(`SELECT * FROM users WHERE email LIKE ? COLLATE NOCASE LIMIT 2`)

@@ -80,17 +80,17 @@ function DemoBanner() {
             </p>
             <ul className="space-y-1 font-mono text-2xs">
               <li>
-                <span className="text-muted">Super Admin</span> &nbsp;admin@mrtc.edu &nbsp;/&nbsp; infin8-super-admin
+                <span className="text-muted">Super Admin</span> &nbsp;admin@demo.cal8 &nbsp;/&nbsp; demo-super-admin
               </li>
               <li>
-                <span className="text-muted">Staff Admin</span> &nbsp;staff1@mrtc.edu &nbsp;/&nbsp; infin8-staff-one
+                <span className="text-muted">Staff Admin</span> &nbsp;staff1@demo.cal8 &nbsp;/&nbsp; demo-staff-one
               </li>
               <li>
-                <span className="text-muted">Staff Admin</span> &nbsp;staff2@mrtc.edu &nbsp;/&nbsp; infin8-staff-two
+                <span className="text-muted">Staff Admin</span> &nbsp;staff2@demo.cal8 &nbsp;/&nbsp; demo-staff-two
               </li>
             </ul>
             <p className="mt-2 text-2xs text-muted">
-              These are the seeded development credentials from .env.example, not real accounts.
+              Demo logins for this preview only. The real calendar's administrator accounts are different, and their passwords are not in the code.
             </p>
           </div>
         </div>

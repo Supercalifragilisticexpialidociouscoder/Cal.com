@@ -34,6 +34,15 @@ services:
       # The API checks the browser's Origin, which the Pages proxy forwards.
       - key: CORS_ORIGINS
         sync: false
+      # The three administrator passwords. sync: false means Render prompts for
+      # them at deploy time and stores them with the service - they are never
+      # committed. Used only when the database is first created.
+      - key: SEED_SUPER_ADMIN_PASSWORD
+        sync: false
+      - key: SEED_STAFF_ONE_PASSWORD
+        sync: false
+      - key: SEED_STAFF_TWO_PASSWORD
+        sync: false
     disk:
       name: calendar-data
       mountPath: /data

@@ -97,16 +97,26 @@ It is a preview, not the product: data is sample content, every change lives in
 the browser tab until reload, and the real authorization rules are enforced by
 the server, not by the demo. The page says so at the top.
 
-### Default accounts
+### Administrator accounts
 
-Seeded from `.env` the first time the database is created. **Change these
-before any real deployment.**
+Three accounts are created the first time the database is built — one Super
+Admin and the two Staff Admins the product allows:
 
-| Role | Email | Password (default) |
+| Role | Email | Password |
 |---|---|---|
-| Super Admin | `admin@mrtc.edu` | `infin8-super-admin` |
-| Staff Admin | `staff1@mrtc.edu` | `infin8-staff-one` |
-| Staff Admin | `staff2@mrtc.edu` | `infin8-staff-two` |
+| Super Admin | `mrtc@admin.cal8` | `SEED_SUPER_ADMIN_PASSWORD` |
+| Staff Admin | `abhi@admin.cal8` | `SEED_STAFF_ONE_PASSWORD` |
+| Staff Admin | `sagar@admin.cal8` | `SEED_STAFF_TWO_PASSWORD` |
+
+**Passwords are never stored in this repository.** They come from the
+environment: your own `.env` locally, and the host's environment variables in
+production. If they are not set, development generates throwaway passwords and
+prints them once at startup, and production refuses to create the accounts
+rather than inventing a credential nobody was told about.
+
+Seeding happens **once**. After that the accounts live in the database and the
+environment values are ignored — change a password from Account settings in the
+app, or delete `server/data` to start over.
 
 Sign in from the discreet **Admin Login** link in the footer, or at `/login`.
 Either the full email or just the part before the `@` works as the username.
