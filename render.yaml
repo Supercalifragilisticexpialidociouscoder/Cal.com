@@ -1,0 +1,40 @@
+# Render Blueprint for the Infin8 Calendar API.
+#
+# Render reads this when you create a Blueprint from the repository, so the
+# service, its disk and most of its configuration come up already set. Other
+# container hosts (Fly.io, Railway, a VPS) work the same way from the
+# Dockerfile; this file is a convenience, not a requirement.
+#
+# The one value to fill in afterwards is CORS_ORIGINS - see below.
+
+services:
+  - type: web
+    name: infin8-calendar-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    # A persistent disk requires a paid instance type. The calendar stores its
+    # database and attachments on that disk, so a plan without one would reset
+    # the calendar on every deploy and restart.
+    plan: starter
+    # Change to the region nearest your users.
+    region: singapore
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "4000"
+      - key: DATA_DIR
+        value: /data
+      # Generated once by Render and then kept; never commit this value.
+      - key: SESSION_SECRET
+        generateValue: true
+      # Set this to your Cloudflare Pages URL, e.g.
+      # https://infin8-calendar.pages.dev
+      # The API checks the browser's Origin, which the Pages proxy forwards.
+      - key: CORS_ORIGINS
+        sync: false
+    disk:
+      name: calendar-data
+      mountPath: /data
+      sizeGB: 1

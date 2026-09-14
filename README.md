@@ -220,14 +220,16 @@ signed out. Routing `/api` through the Pages domain keeps client and API on one
 origin, so the cookie works and the CSRF design is untouched — no third-party
 cookies, no `SameSite=None`.
 
-**1. The API.** Build the image and deploy it anywhere that takes a container
-(Render, Fly.io, Railway, a VPS):
+**1. The API.** It is a container, so it runs anywhere that takes one — Render,
+Fly.io, Railway, a VPS:
 
 ```bash
 docker build -t infin8-calendar-api .
 ```
 
-Required configuration:
+`render.yaml` is a Render Blueprint that brings the service and its disk up
+already configured; on other hosts, point them at the `Dockerfile` and set the
+same variables by hand:
 
 | Variable | Value |
 |---|---|
@@ -236,8 +238,21 @@ Required configuration:
 | `CORS_ORIGINS` | your Pages URL, e.g. `https://infin8-calendar.pages.dev` |
 | `DATA_DIR` | `/data`, with a **persistent disk mounted there** |
 
-Without that disk the calendar is wiped on every restart. `/api/health` is a
-ready-made health check.
+Two things that will bite otherwise:
+
+- **The disk is not optional.** The database and every uploaded attachment live
+  in `DATA_DIR`. On a host without a persistent disk the calendar is empty
+  again after each deploy and each restart.
+- **Run exactly one instance.** It is a single SQLite file; two replicas would
+  each hold their own copy and diverge. Scale the machine up, not out.
+
+`/api/health` is a ready-made health check. Confirm the API is up on its own
+before wiring the client to it:
+
+```bash
+curl https://your-api-host/api/health
+# {"ok":true,"service":"infin8-calendar-api", ...}
+```
 
 **2. The client.** In the Cloudflare Pages project:
 
@@ -248,8 +263,20 @@ ready-made health check.
 | Environment variable | `API_ORIGIN` = the API's base URL |
 
 `wrangler.toml` sets the output directory, and `web/public/_redirects` gives the
-single page app its deep links. If `API_ORIGIN` is unset the proxy returns a
-readable message rather than failing silently.
+single page app its deep links.
+
+**Environment variables in Pages only take effect on the next deployment.**
+After adding `API_ORIGIN`, redeploy — an existing deployment keeps the values it
+was built with. Set it for the environment you are actually visiting, too:
+Production and Preview hold separate values.
+
+If `API_ORIGIN` is unset the proxy says so rather than failing silently:
+
+> The calendar service is not configured yet. Set API_ORIGIN in the Pages
+> project to the URL of the API.
+
+Seeing that message means the client and the Pages Function are both working —
+only the API is missing.
 
 ### Troubleshooting
 
@@ -258,9 +285,14 @@ readable message rather than failing silently.
 explicit output directory set in its dashboard, clear it or set it to
 `web/dist`.
 
-**The site loads but no events appear, or admin sign-in does nothing.** The
-client reached Pages but `/api` did not reach the API. Check `API_ORIGIN` in the
-Pages project, and that the API is up at `<API_ORIGIN>/api/health`.
+**"The calendar service is not configured yet."** The Pages Function is running
+but `API_ORIGIN` is not set for the environment you are viewing, or it was set
+after the current deployment was built. Set it and redeploy.
+
+**"We could not reach the calendar service."** `API_ORIGIN` is set but the API
+did not answer. Check it directly with `curl <API_ORIGIN>/api/health`; on hosts
+that idle a container to sleep, the first request after a quiet period can time
+out while it wakes.
 
 **Sign-in returns "This request came from an unrecognised origin."** Add the
 Pages URL to `CORS_ORIGINS` on the API and restart it.
