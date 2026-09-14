@@ -24,6 +24,21 @@ function requiredSecret(): string {
   return crypto.randomBytes(32).toString('base64url');
 }
 
+/**
+ * Reads a seed password from the environment.
+ *
+ * Passwords are never hardcoded here. This file is committed to a public
+ * repository, and a default baked into it would be a published credential for
+ * every deployment that did not override it - the account names and addresses
+ * are right here in the open beside it. Returning null lets the seeder decide:
+ * refuse to create accounts in production, or generate a throwaway one for
+ * local development and print it to the console.
+ */
+function seedPassword(key: string): string | null {
+  const value = process.env[key]?.trim();
+  return value && value.length >= 8 ? value : null;
+}
+
 const dataDirRaw = process.env.DATA_DIR?.trim() || './data';
 const dataDir = path.isAbsolute(dataDirRaw)
   ? dataDirRaw
@@ -61,20 +76,20 @@ export const config = {
   seed: {
     demoData: (process.env.SEED_DEMO_DATA ?? 'true') !== 'false',
     superAdmin: {
-      name: process.env.SEED_SUPER_ADMIN_NAME ?? 'MRTC Super Admin',
-      email: (process.env.SEED_SUPER_ADMIN_EMAIL ?? 'admin@mrtc.edu').toLowerCase(),
-      password: process.env.SEED_SUPER_ADMIN_PASSWORD ?? 'infin8-super-admin',
+      name: process.env.SEED_SUPER_ADMIN_NAME ?? 'MRTC Admin',
+      email: (process.env.SEED_SUPER_ADMIN_EMAIL ?? 'mrtc@admin.cal8').toLowerCase(),
+      password: seedPassword('SEED_SUPER_ADMIN_PASSWORD'),
     },
     staff: [
       {
-        name: process.env.SEED_STAFF_ONE_NAME ?? 'Staff Admin One',
-        email: (process.env.SEED_STAFF_ONE_EMAIL ?? 'staff1@mrtc.edu').toLowerCase(),
-        password: process.env.SEED_STAFF_ONE_PASSWORD ?? 'infin8-staff-one',
+        name: process.env.SEED_STAFF_ONE_NAME ?? 'Abhi',
+        email: (process.env.SEED_STAFF_ONE_EMAIL ?? 'abhi@admin.cal8').toLowerCase(),
+        password: seedPassword('SEED_STAFF_ONE_PASSWORD'),
       },
       {
-        name: process.env.SEED_STAFF_TWO_NAME ?? 'Staff Admin Two',
-        email: (process.env.SEED_STAFF_TWO_EMAIL ?? 'staff2@mrtc.edu').toLowerCase(),
-        password: process.env.SEED_STAFF_TWO_PASSWORD ?? 'infin8-staff-two',
+        name: process.env.SEED_STAFF_TWO_NAME ?? 'Sagar',
+        email: (process.env.SEED_STAFF_TWO_EMAIL ?? 'sagar@admin.cal8').toLowerCase(),
+        password: seedPassword('SEED_STAFF_TWO_PASSWORD'),
       },
     ],
   },

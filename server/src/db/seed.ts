@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import { config } from '../config';
 import { getDb } from './index';
 import { addDays, todayISO } from '../lib/dates';
@@ -83,10 +84,41 @@ export function ensureSeedData(): void {
   for (const staff of config.seed.staff) {
     console.log(`[infin8-calendar] staff admin: ${staff.email}`);
   }
-  if (!config.isProduction) {
-    console.log('[infin8-calendar] seed passwords come from .env - change them before going live.');
+
+  // Only ever printed for passwords this process generated itself. A password
+  // supplied through the environment is never echoed to the logs.
+  if (generatedPasswords.length > 0) {
+    console.log('[infin8-calendar] no seed passwords were set, so these were generated for local use:');
+    for (const { email, password } of generatedPasswords) {
+      console.log(`[infin8-calendar]   ${email}  ${password}`);
+    }
+    console.log('[infin8-calendar] set SEED_*_PASSWORD in .env to choose your own.');
   }
 }
+
+/**
+ * Every administrator password comes from the environment. When one is missing,
+ * production refuses to create the account rather than inventing a credential
+ * nobody was told about; development generates a throwaway and prints it, so a
+ * local checkout still works with no setup.
+ */
+function resolveSeedPassword(password: string | null, envVar: string, email: string): string {
+  if (password) return password;
+
+  if (config.isProduction) {
+    throw new Error(
+      `${envVar} is not set, so the administrator account ${email} cannot be created. ` +
+        `Set it (at least 8 characters) in the environment and restart. ` +
+        `Passwords are never stored in the repository.`
+    );
+  }
+
+  const generated = crypto.randomBytes(9).toString('base64url');
+  generatedPasswords.push({ email, password: generated });
+  return generated;
+}
+
+const generatedPasswords: Array<{ email: string; password: string }> = [];
 
 function seedUsers(): void {
   const db = getDb();
@@ -98,14 +130,26 @@ function seedUsers(): void {
   insert.run(
     config.seed.superAdmin.name,
     config.seed.superAdmin.email,
-    hashPassword(config.seed.superAdmin.password),
+    hashPassword(
+      resolveSeedPassword(
+        config.seed.superAdmin.password,
+        'SEED_SUPER_ADMIN_PASSWORD',
+        config.seed.superAdmin.email
+      )
+    ),
     'super_admin'
   );
 
   // Exactly two staff admin accounts (spec 2).
-  for (const staff of config.seed.staff.slice(0, 2)) {
-    insert.run(staff.name, staff.email, hashPassword(staff.password), 'staff_admin');
-  }
+  const staffEnvVars = ['SEED_STAFF_ONE_PASSWORD', 'SEED_STAFF_TWO_PASSWORD'];
+  config.seed.staff.slice(0, 2).forEach((staff, index) => {
+    insert.run(
+      staff.name,
+      staff.email,
+      hashPassword(resolveSeedPassword(staff.password, staffEnvVars[index], staff.email)),
+      'staff_admin'
+    );
+  });
 }
 
 function seedOrganizations(): void {
