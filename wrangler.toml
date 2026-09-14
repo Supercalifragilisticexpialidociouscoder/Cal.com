@@ -1,0 +1,14 @@
+# Cloudflare Pages configuration for the Infin8 Calendar web client.
+#
+# Pages hosts the client only. The API is a Node process with a SQLite file on
+# a persistent disk, so it runs on a host that can keep state (see the
+# Deployment section of the README); requests to /api are proxied there by
+# functions/api/[[path]].ts.
+
+name = "infin8-calendar"
+pages_build_output_dir = "web/dist"
+compatibility_date = "2026-01-01"
+
+# Set API_ORIGIN in the Pages project (Settings > Variables) to the base URL of
+# the deployed API, for example https://infin8-calendar-api.onrender.com.
+# It is intentionally not committed: it differs per environment.
