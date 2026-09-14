@@ -23,17 +23,17 @@ export function ConflictWarning({
   return (
     <div
       role="alert"
-      className="rounded-xl border border-amber-500/35 bg-amber-50 p-3.5 text-sm dark:bg-amber-400/[0.07]"
+      className="rounded-xl border border-attention-edge bg-attention-wash p-3.5 text-sm"
     >
       <div className="flex items-start gap-2.5">
         <span
           aria-hidden="true"
-          className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-amber-500/20 text-xs font-bold text-amber-800 dark:text-amber-200"
+          className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-attention/20 text-xs font-bold text-attention-text"
         >
           !
         </span>
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-amber-900 dark:text-amber-100">{message}</p>
+          <p className="font-semibold text-attention-text">{message}</p>
 
           {conflicts.length > 0 && (
             <ul className="mt-2 space-y-1.5">

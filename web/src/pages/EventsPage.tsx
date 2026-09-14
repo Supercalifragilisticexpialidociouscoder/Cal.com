@@ -123,7 +123,7 @@ export function EventsPage() {
             />
           </div>
 
-          <div role="tablist" aria-label="Time range" className="flex rounded-lg border border-edge bg-surface p-0.5">
+          <div role="tablist" aria-label="Time range" className="flex rounded-lg border border-hairline bg-raised p-0.5">
             {(['upcoming', 'past', 'all'] as Window[]).map((option) => (
               <button
                 key={option}
@@ -132,8 +132,10 @@ export function EventsPage() {
                 aria-selected={window_ === option}
                 onClick={() => setWindow(option)}
                 className={cn(
-                  'rounded-md px-2.5 py-1 text-[0.8125rem] font-medium capitalize transition-colors',
-                  window_ === option ? 'bg-accent text-accent-ink' : 'text-muted hover:text-ink'
+                  'rounded-md px-2.5 py-1 text-[0.8125rem] font-medium capitalize transition',
+                  window_ === option
+                    ? 'bg-surface text-ink shadow-card'
+                    : 'text-muted hover:text-ink'
                 )}
               >
                 {option}

@@ -133,8 +133,8 @@ export function EventDetailPage() {
       </div>
 
       {event.archived && (
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-500/35 bg-amber-50 px-4 py-3 text-sm dark:bg-amber-400/[0.07]">
-          <p className="font-medium text-amber-900 dark:text-amber-100">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-attention-edge bg-attention-wash px-4 py-3 text-sm">
+          <p className="font-medium text-attention-text">
             This event is archived. It no longer appears on the calendar.
           </p>
           <button type="button" onClick={restore} disabled={busy} className="btn btn-sm btn-outline">
@@ -153,7 +153,7 @@ export function EventDetailPage() {
             {EVENT_TYPE_LABELS[event.event_type]}
           </Pill>
           {event.important && (
-            <Pill className="border-accent/30 bg-accent-wash text-accent">Important</Pill>
+            <Pill className="border-transparent bg-accent text-accent-ink">Important</Pill>
           )}
           {event.is_public === false && (
             <Pill className="border-hairline bg-raised text-muted">Internal event</Pill>

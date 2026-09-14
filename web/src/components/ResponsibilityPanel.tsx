@@ -190,7 +190,7 @@ export function ResponsibilityPanel({
                     <Pill
                       className={
                         responsibility.public_visibility
-                          ? 'border-emerald-600/20 bg-emerald-50 text-emerald-800 dark:border-emerald-400/25 dark:bg-emerald-400/10 dark:text-emerald-200'
+                          ? 'border-transparent bg-success-wash text-success-text'
                           : 'border-hairline bg-raised text-muted'
                       }
                       title={
@@ -212,7 +212,7 @@ export function ResponsibilityPanel({
                       <span
                         className={cn(
                           isPastDue(responsibility.due_at) && responsibility.status !== 'completed'
-                            ? 'font-medium text-rose-600 dark:text-rose-400'
+                            ? 'font-medium text-error-text'
                             : ''
                         )}
                       >
@@ -441,7 +441,7 @@ function AddResponsibilityForm({
               type="checkbox"
               checked={isPublic}
               onChange={(event) => setIsPublic(event.target.checked)}
-              className="h-4 w-4 rounded border-edge text-accent focus:ring-accent/40"
+              className="h-4 w-4 rounded border-edge text-ink focus:ring-ink/20"
             />
             Visible to the public
           </label>

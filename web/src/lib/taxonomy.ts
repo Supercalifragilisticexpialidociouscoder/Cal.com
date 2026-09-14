@@ -50,32 +50,32 @@ export const READINESS_LABELS: Record<Readiness['label'], string> = {
 
 /**
  * Colour carries meaning, not decoration (spec 33): where an event comes from,
- * what state it is in, and how ready it is. Five source hues plus amber for
- * deadlines - not one colour per club.
+ * what state it is in, and how ready it is.
+ *
+ * Every value is a theme token, so light and dark are two designed palettes
+ * rather than one inverted set, and the whole scale can be retuned in one file.
+ * MRTC's own events take the brand colour - near-black in light, white in dark -
+ * because the institution is the brand; the clubs and departments take the
+ * accent ramp beside it.
  */
 const SOURCE_ACCENT: Record<SourceType, string> = {
-  institution: 'bg-blue-600 dark:bg-blue-400',
-  department: 'bg-cyan-600 dark:bg-cyan-400',
-  academic: 'bg-emerald-600 dark:bg-emerald-400',
-  club: 'bg-violet-600 dark:bg-violet-400',
-  other: 'bg-slate-500 dark:bg-slate-400',
+  institution: 'bg-src-institution',
+  department: 'bg-src-department',
+  academic: 'bg-src-academic',
+  club: 'bg-src-club',
+  other: 'bg-src-other',
 };
 
 const SOURCE_PILL: Record<SourceType, string> = {
-  institution:
-    'border-blue-600/20 bg-blue-50 text-blue-800 dark:border-blue-400/25 dark:bg-blue-400/10 dark:text-blue-200',
-  department:
-    'border-cyan-600/20 bg-cyan-50 text-cyan-800 dark:border-cyan-400/25 dark:bg-cyan-400/10 dark:text-cyan-200',
-  academic:
-    'border-emerald-600/20 bg-emerald-50 text-emerald-800 dark:border-emerald-400/25 dark:bg-emerald-400/10 dark:text-emerald-200',
-  club: 'border-violet-600/20 bg-violet-50 text-violet-800 dark:border-violet-400/25 dark:bg-violet-400/10 dark:text-violet-200',
-  other:
-    'border-slate-500/20 bg-slate-100 text-slate-700 dark:border-slate-400/25 dark:bg-slate-400/10 dark:text-slate-200',
+  institution: 'border-transparent bg-src-institution-wash text-src-institution-text',
+  department: 'border-transparent bg-src-department-wash text-src-department-text',
+  academic: 'border-transparent bg-src-academic-wash text-src-academic-text',
+  club: 'border-transparent bg-src-club-wash text-src-club-text',
+  other: 'border-transparent bg-src-other-wash text-src-other-text',
 };
 
-const DEADLINE_ACCENT = 'bg-amber-500 dark:bg-amber-400';
-const DEADLINE_PILL =
-  'border-amber-600/25 bg-amber-50 text-amber-900 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-200';
+const DEADLINE_ACCENT = 'bg-src-deadline';
+const DEADLINE_PILL = 'border-transparent bg-src-deadline-wash text-src-deadline-text';
 
 /** The colour bar / dot for an event, deadlines taking precedence. */
 export function eventAccent(event: Pick<CalendarEvent, 'source' | 'event_type'>): string {
@@ -93,34 +93,29 @@ export function sourcePill(source: SourceType): string {
 }
 
 export const STATUS_PILL: Record<EventStatus, string> = {
-  planning:
-    'border-slate-500/20 bg-slate-100 text-slate-700 dark:border-slate-400/25 dark:bg-slate-400/10 dark:text-slate-200',
-  confirmed:
-    'border-emerald-600/20 bg-emerald-50 text-emerald-800 dark:border-emerald-400/25 dark:bg-emerald-400/10 dark:text-emerald-200',
-  ongoing:
-    'border-amber-600/25 bg-amber-50 text-amber-900 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-200',
-  completed:
-    'border-hairline bg-raised text-muted',
-  cancelled:
-    'border-rose-600/20 bg-rose-50 text-rose-800 line-through dark:border-rose-400/25 dark:bg-rose-400/10 dark:text-rose-200',
+  planning: 'border-hairline bg-raised text-muted',
+  confirmed: 'border-transparent bg-success-wash text-success-text',
+  ongoing: 'border-transparent bg-attention-wash text-attention-text',
+  completed: 'border-hairline bg-transparent text-faint',
+  cancelled: 'border-transparent bg-error-wash text-error-text line-through',
 };
 
 export const READINESS_BAR: Record<Readiness['label'], string> = {
-  ready: 'bg-emerald-500 dark:bg-emerald-400',
-  in_progress: 'bg-amber-500 dark:bg-amber-400',
-  needs_attention: 'bg-rose-500 dark:bg-rose-400',
+  ready: 'bg-success',
+  in_progress: 'bg-attention',
+  needs_attention: 'bg-error',
 };
 
 export const READINESS_TEXT: Record<Readiness['label'], string> = {
-  ready: 'text-emerald-700 dark:text-emerald-300',
-  in_progress: 'text-amber-700 dark:text-amber-300',
-  needs_attention: 'text-rose-700 dark:text-rose-300',
+  ready: 'text-success-text',
+  in_progress: 'text-attention-text',
+  needs_attention: 'text-error-text',
 };
 
 export const READINESS_DOT: Record<Readiness['label'], string> = {
-  ready: '🟢',
-  in_progress: '🟡',
-  needs_attention: '🔴',
+  ready: '\u{1F7E2}',
+  in_progress: '\u{1F7E1}',
+  needs_attention: '\u{1F534}',
 };
 
 /** Options for the Source filter (spec 20). */

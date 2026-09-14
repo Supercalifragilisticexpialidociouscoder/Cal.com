@@ -51,12 +51,12 @@ export function EventCard({
       <div className="min-w-0 flex-1 pl-1.5">
         <div className="flex flex-wrap items-center gap-1.5">
           {isDeadline && (
-            <Pill className="border-amber-600/25 bg-amber-50 text-amber-900 dark:border-amber-400/30 dark:bg-amber-400/10 dark:text-amber-200">
+            <Pill className="border-transparent bg-src-deadline-wash text-src-deadline-text">
               Deadline
             </Pill>
           )}
           {event.important && (
-            <Pill className="border-accent/30 bg-accent-wash text-accent" title="Marked important">
+            <Pill className="border-transparent bg-accent text-accent-ink" title="Marked important">
               Important
             </Pill>
           )}
@@ -134,7 +134,7 @@ export function EventRow({ event }: { event: CalendarEvent }) {
             {event.title}
           </span>
           {event.important && (
-            <Pill className="border-accent/30 bg-accent-wash text-accent">Important</Pill>
+            <Pill className="border-transparent bg-accent text-accent-ink">Important</Pill>
           )}
         </span>
         <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-xs text-muted">

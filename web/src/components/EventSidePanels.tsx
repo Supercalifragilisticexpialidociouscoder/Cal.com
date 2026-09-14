@@ -110,7 +110,7 @@ export function EventNotesPanel({
                   <button
                     type="button"
                     onClick={() => setRemoving(note)}
-                    className="text-2xs font-medium text-muted transition-colors hover:text-rose-600"
+                    className="text-2xs font-medium text-muted transition-colors hover:text-error"
                   >
                     Remove
                   </button>
@@ -222,7 +222,7 @@ export function AttachmentsPanel({
                 type="checkbox"
                 checked={publishOnUpload}
                 onChange={(event) => setPublishOnUpload(event.target.checked)}
-                className="h-3.5 w-3.5 rounded border-edge text-accent focus:ring-accent/40"
+                className="h-3.5 w-3.5 rounded border-edge text-ink focus:ring-ink/20"
               />
               Publish on upload
             </label>
@@ -278,7 +278,7 @@ export function AttachmentsPanel({
                   <Pill
                     className={
                       attachment.public_visibility
-                        ? 'border-emerald-600/20 bg-emerald-50 text-emerald-800 dark:border-emerald-400/25 dark:bg-emerald-400/10 dark:text-emerald-200'
+                        ? 'border-transparent bg-success-wash text-success-text'
                         : 'border-hairline bg-raised text-muted'
                     }
                   >

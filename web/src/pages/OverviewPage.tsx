@@ -130,11 +130,11 @@ export function OverviewPage() {
               <Link
                 key={deadline.id}
                 to={`/events/${deadline.id}`}
-                className="group flex items-start gap-3 rounded-xl border border-amber-500/25 bg-amber-50/60 p-3.5 transition-colors hover:border-amber-500/50 dark:bg-amber-400/[0.06]"
+                className="group flex items-start gap-3 rounded-xl border border-hairline bg-surface p-3.5 shadow-card transition-colors hover:border-edge"
               >
                 <span
                   aria-hidden="true"
-                  className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber-500/15 text-amber-700 dark:text-amber-300"
+                  className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-src-deadline-wash text-src-deadline"
                 >
                   <svg viewBox="0 0 16 16" className="h-4 w-4">
                     <circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" strokeWidth="1.5" />
@@ -142,7 +142,7 @@ export function OverviewPage() {
                   </svg>
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-2xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-300">
+                  <span className="block text-2xs font-semibold uppercase tracking-wider text-src-deadline-text">
                     {deadline.organizer_name}
                   </span>
                   <span className="mt-0.5 block truncate text-sm font-semibold text-ink group-hover:text-accent">
@@ -186,7 +186,7 @@ export function OverviewPage() {
                     aria-hidden="true"
                     className={cn(
                       'mt-1 h-[15px] w-[15px] shrink-0 rounded-[4px] border',
-                      task.status === 'in_progress' ? 'border-amber-500 bg-amber-500/20' : 'border-edge'
+                      task.status === 'in_progress' ? 'border-attention bg-attention/20' : 'border-edge'
                     )}
                   />
                   <span className="min-w-0 flex-1">
@@ -306,5 +306,5 @@ function StatTile({
 }
 
 export function ImportantBadge() {
-  return <Pill className="border-accent/30 bg-accent-wash text-accent">Important</Pill>;
+  return <Pill className="border-transparent bg-accent text-accent-ink">Important</Pill>;
 }

@@ -47,12 +47,12 @@ function DemoBanner() {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <div className="border-b border-amber-500/30 bg-amber-50 text-amber-900 dark:bg-amber-400/10 dark:text-amber-100">
+    <div className="border-b border-attention-edge bg-attention-wash text-attention-text">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 text-xs sm:px-6">
         <span className="inline-flex items-center gap-1.5 font-semibold">
           <span
             aria-hidden="true"
-            className="grid h-4 w-4 place-items-center rounded-full bg-amber-500/25 text-[0.625rem] font-bold"
+            className="grid h-4 w-4 place-items-center rounded-full bg-attention/25 text-[0.625rem] font-bold"
           >
             i
           </span>
@@ -64,7 +64,7 @@ function DemoBanner() {
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
-          className="rounded-md border border-amber-600/30 px-2 py-0.5 font-medium transition-colors hover:bg-amber-500/15"
+          className="rounded-md border border-attention-edge px-2 py-0.5 font-medium transition-colors hover:bg-attention/15"
           aria-expanded={open}
         >
           {open ? 'Hide sign-in details' : 'Admin sign-in details'}
@@ -73,7 +73,7 @@ function DemoBanner() {
 
       {open && (
         <div className="mx-auto max-w-6xl px-4 pb-3 text-xs sm:px-6">
-          <div className="rounded-lg border border-amber-600/25 bg-surface/70 p-3 text-ink dark:bg-black/20">
+          <div className="rounded-lg border border-attention-edge bg-surface/70 p-3 text-ink dark:bg-black/20">
             <p className="mb-2 text-muted">
               Sign in from <strong className="text-ink">Admin Login</strong> in the footer to see the
               administrator experience. Public visitors never need an account.

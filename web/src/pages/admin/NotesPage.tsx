@@ -342,7 +342,7 @@ function NoteCard({
     <article className="card flex flex-col p-3.5">
       <div className="flex items-start justify-between gap-2">
         <h3 className="min-w-0 flex-1 text-sm font-semibold text-ink">{note.title || 'Untitled note'}</h3>
-        {note.pinned && <Pill className="border-accent/30 bg-accent-wash text-accent">Pinned</Pill>}
+        {note.pinned && <Pill className="border-transparent bg-accent text-accent-ink">Pinned</Pill>}
         {note.archived && <Pill className="border-hairline bg-raised text-muted">Archived</Pill>}
       </div>
 
@@ -368,7 +368,7 @@ function NoteCard({
         <button
           type="button"
           onClick={onDelete}
-          className="btn btn-sm btn-ghost ml-auto text-2xs hover:text-rose-600"
+          className="btn btn-sm btn-ghost ml-auto text-2xs hover:text-error"
         >
           Delete
         </button>
@@ -578,7 +578,7 @@ function ConvertNoteDialog({
                 type="checkbox"
                 checked={isPublic}
                 onChange={(changeEvent) => setIsPublic(changeEvent.target.checked)}
-                className="h-4 w-4 rounded border-edge text-accent focus:ring-accent/40"
+                className="h-4 w-4 rounded border-edge text-ink focus:ring-ink/20"
               />
               Visible to the public
             </label>
@@ -587,7 +587,7 @@ function ConvertNoteDialog({
                 type="checkbox"
                 checked={archiveNote}
                 onChange={(changeEvent) => setArchiveNote(changeEvent.target.checked)}
-                className="h-4 w-4 rounded border-edge text-accent focus:ring-accent/40"
+                className="h-4 w-4 rounded border-edge text-ink focus:ring-ink/20"
               />
               Archive this note
             </label>

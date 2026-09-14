@@ -69,7 +69,7 @@ export function AccountPage() {
           <Pill
             className={
               isSuperAdmin
-                ? 'border-accent/30 bg-accent-wash text-accent'
+                ? 'border-transparent bg-accent text-accent-ink'
                 : 'border-hairline bg-raised text-muted'
             }
           >
@@ -80,7 +80,7 @@ export function AccountPage() {
 
       <section className="card p-4 sm:p-5">
         <h2 className="mb-3 text-sm font-semibold text-ink">Appearance</h2>
-        <div className="flex gap-1 rounded-lg border border-edge bg-surface p-0.5">
+        <div className="flex gap-1 rounded-lg border border-hairline bg-raised p-0.5">
           {themes.map((option) => (
             <button
               key={option.value}
@@ -88,8 +88,10 @@ export function AccountPage() {
               onClick={() => setMode(option.value)}
               aria-pressed={mode === option.value}
               className={cn(
-                'flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-                mode === option.value ? 'bg-accent text-accent-ink' : 'text-muted hover:text-ink'
+                'flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition',
+                mode === option.value
+                  ? 'bg-surface text-ink shadow-card'
+                  : 'text-muted hover:text-ink'
               )}
             >
               {option.label}

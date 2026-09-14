@@ -173,7 +173,7 @@ export function CalendarPage() {
         <div
           role="tablist"
           aria-label="Calendar view"
-          className="flex rounded-lg border border-edge bg-surface p-0.5"
+          className="flex rounded-lg border border-hairline bg-raised p-0.5"
         >
           {VIEWS.map((option) => (
             <button
@@ -183,8 +183,10 @@ export function CalendarPage() {
               aria-selected={view === option.value}
               onClick={() => setView(option.value)}
               className={cn(
-                'rounded-md px-2.5 py-1 text-[0.8125rem] font-medium transition-colors',
-                view === option.value ? 'bg-accent text-accent-ink' : 'text-muted hover:text-ink'
+                'rounded-md px-2.5 py-1 text-[0.8125rem] font-medium transition',
+                view === option.value
+                  ? 'bg-surface text-ink shadow-card'
+                  : 'text-muted hover:text-ink'
               )}
             >
               {option.label}
@@ -289,11 +291,11 @@ function Chevron({ direction }: { direction: 'left' | 'right' }) {
 /** Colour is only useful if it is explained once. */
 function Legend() {
   const items = [
-    { label: 'MRTC', className: 'bg-blue-600 dark:bg-blue-400' },
-    { label: 'Department', className: 'bg-cyan-600 dark:bg-cyan-400' },
-    { label: 'Academic', className: 'bg-emerald-600 dark:bg-emerald-400' },
-    { label: 'Club', className: 'bg-violet-600 dark:bg-violet-400' },
-    { label: 'Deadline', className: 'bg-amber-500 dark:bg-amber-400' },
+    { label: 'MRTC', className: 'bg-src-institution' },
+    { label: 'Department', className: 'bg-src-department' },
+    { label: 'Academic', className: 'bg-src-academic' },
+    { label: 'Club', className: 'bg-src-club' },
+    { label: 'Deadline', className: 'bg-attention' },
   ];
 
   return (

@@ -241,7 +241,7 @@ function OrganisationsTab() {
                 <button
                   type="button"
                   onClick={() => setRemoving({ id: organization.id, name: organization.name })}
-                  className="btn btn-sm btn-ghost text-2xs hover:text-rose-600"
+                  className="btn btn-sm btn-ghost text-2xs hover:text-error"
                 >
                   Remove
                 </button>
@@ -347,7 +347,7 @@ function VenuesTab() {
               <button
                 type="button"
                 onClick={() => setRemoving({ id: venue.id, name: venue.name })}
-                className="btn btn-sm btn-ghost text-2xs hover:text-rose-600"
+                className="btn btn-sm btn-ghost text-2xs hover:text-error"
               >
                 Remove
               </button>
@@ -537,7 +537,7 @@ function AdministratorsTab() {
             <Pill
               className={
                 user.role === 'super_admin'
-                  ? 'border-accent/30 bg-accent-wash text-accent'
+                  ? 'border-transparent bg-accent text-accent-ink'
                   : 'border-hairline bg-raised text-muted'
               }
             >
@@ -550,7 +550,7 @@ function AdministratorsTab() {
                 <button
                   type="button"
                   onClick={() => setDeactivating(user)}
-                  className="btn btn-sm btn-ghost text-2xs hover:text-rose-600"
+                  className="btn btn-sm btn-ghost text-2xs hover:text-error"
                 >
                   Deactivate
                 </button>

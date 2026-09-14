@@ -318,12 +318,45 @@ Always a readable sentence, never a bare status code:
 
 ## Design
 
-Restrained and institutional: neutral surfaces, one MRTC accent, and colour
-used to carry meaning rather than decoration — five hues for where an event
-comes from (MRTC, department, academic, club, other), amber for deadlines, and
-green/amber/red for readiness and status. Light and dark are two intentional
-palettes, not one inverted; the theme follows the system by default and is
-applied before first paint so there is no flash.
+The interface follows **Cal.com's design language**, at the project's request.
+
+What that means concretely, taken from their published design tokens:
+
+- An **achromatic neutral scale** — greys with no hue bias — rather than a
+  tinted one.
+- **Near-black as the brand colour** in light, white in dark. The primary
+  button, the logo mark, the "today" marker and the Important chip are all that
+  one colour; there is no decorative accent hue.
+- **Hairline borders** (`#E5E7EB` light, `#262626` dark) doing the work that
+  shadows do elsewhere, with a heavier `border` value for controls.
+- A **10px control radius** on every button, input and select.
+- A **neutral focus ring** — a surface-coloured halo inside a dark ring —
+  instead of a coloured one, so it reads the same on every surface.
+- Solid buttons carrying a **layered shadow with an inset highlight**, which is
+  what gives their primary button its slight physicality.
+- **Segmented controls** as a subtle track with a raised white selected item,
+  not a filled pill.
+
+Colour is reserved for meaning. Where an event comes from takes the
+"visualization" ramp — MRTC itself takes the brand colour, because the
+institution *is* the brand — and status and readiness take the semantic ramp
+(green / orange / red). Light and dark are two designed palettes: the dark
+washes use Cal.com's *semantic* values rather than its chart fills, which are
+far too hot behind text.
+
+Two deliberate departures:
+
+- **Cal Sans is not used.** It is Cal.com's own brand typeface, and shipping it
+  would borrow their identity rather than their design language. Type is Inter
+  with the platform UI face behind it — no webfont request, so the page still
+  loads in one round trip.
+- **No Cal.com code.** Their repository is AGPL-3.0; copying components into
+  this project would impose that licence on it. The tokens and component styles
+  here are written from scratch against the same visual specification.
+
+Every colour is a CSS custom property in `web/src/index.css`, so the whole
+system can be retuned in one file — including back to an MRTC palette, if the
+institution ever wants its own colours instead.
 
 Desktop leads with the calendar grid. Phones default to Agenda, because a dense
 month grid is hard to use there, and get a simplified bottom navigation.

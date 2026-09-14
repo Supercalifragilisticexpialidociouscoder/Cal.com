@@ -38,7 +38,7 @@ export function UpcomingPage() {
                 to={`/events/${deadline.id}`}
                 className="flex flex-wrap items-baseline gap-x-3 gap-y-1 px-3.5 py-3 transition-colors hover:bg-raised"
               >
-                <span className="w-full text-2xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-300 sm:w-auto">
+                <span className="w-full text-2xs font-semibold uppercase tracking-wider text-attention-text sm:w-auto">
                   {deadline.organizer_name}
                 </span>
                 <span className="min-w-0 flex-1 truncate text-sm font-medium text-ink">

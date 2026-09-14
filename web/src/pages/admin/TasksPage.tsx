@@ -74,7 +74,7 @@ export function TasksPage() {
             type="checkbox"
             checked={includeCompleted}
             onChange={(changeEvent) => setIncludeCompleted(changeEvent.target.checked)}
-            className="h-4 w-4 rounded border-edge text-accent focus:ring-accent/40"
+            className="h-4 w-4 rounded border-edge text-ink focus:ring-ink/20"
           />
           Show completed
         </label>
@@ -161,7 +161,7 @@ function Group({
                     {' · '}
                     <span
                       className={cn(
-                        tone === 'overdue' && 'font-medium text-rose-600 dark:text-rose-400'
+                        tone === 'overdue' && 'font-medium text-error-text'
                       )}
                     >
                       Due {formatDueAt(task.due_at)}

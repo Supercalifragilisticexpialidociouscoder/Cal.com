@@ -399,7 +399,7 @@ export function EventFormPage() {
               type="checkbox"
               checked={form.all_day}
               onChange={(changeEvent) => set('all_day', changeEvent.target.checked)}
-              className="h-4 w-4 rounded border-edge text-accent focus:ring-accent/40"
+              className="h-4 w-4 rounded border-edge text-ink focus:ring-ink/20"
             />
             All day
           </label>
@@ -460,7 +460,7 @@ export function EventFormPage() {
                   type="checkbox"
                   checked={form.important}
                   onChange={(changeEvent) => set('important', changeEvent.target.checked)}
-                  className="h-4 w-4 rounded border-edge text-accent focus:ring-accent/40"
+                  className="h-4 w-4 rounded border-edge text-ink focus:ring-ink/20"
                 />
                 Important event
               </label>
@@ -469,7 +469,7 @@ export function EventFormPage() {
                   type="checkbox"
                   checked={form.is_public}
                   onChange={(changeEvent) => set('is_public', changeEvent.target.checked)}
-                  className="h-4 w-4 rounded border-edge text-accent focus:ring-accent/40"
+                  className="h-4 w-4 rounded border-edge text-ink focus:ring-ink/20"
                 />
                 Show on the public calendar
               </label>

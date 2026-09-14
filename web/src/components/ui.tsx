@@ -99,7 +99,7 @@ export function ErrorNotice({
   return (
     <div
       role="alert"
-      className="rounded-xl border border-rose-500/25 bg-rose-50 px-4 py-3 text-sm text-rose-900 dark:bg-rose-950/40 dark:text-rose-100"
+      className="rounded-xl border border-error-edge bg-error-wash px-4 py-3 text-sm text-error-text"
     >
       <p>{message}</p>
       {onRetry && (
@@ -113,7 +113,7 @@ export function ErrorNotice({
 
 export function FieldError({ message }: { message?: string }) {
   if (!message) return null;
-  return <p className="mt-1 text-xs text-rose-600 dark:text-rose-400">{message}</p>;
+  return <p className="mt-1 text-xs text-error-text">{message}</p>;
 }
 
 /** A checkbox / progress toggle: unchecked, half done, complete (spec 11). */
@@ -140,9 +140,9 @@ export function StatusCheckbox({
       className={cn(
         'mt-0.5 grid h-[18px] w-[18px] shrink-0 place-items-center rounded-[5px] border transition-colors',
         status === 'completed'
-          ? 'border-emerald-600 bg-emerald-600 text-white dark:border-emerald-500 dark:bg-emerald-500 animate-check-pop'
+          ? 'border-success bg-success text-white animate-check-pop'
           : status === 'in_progress'
-            ? 'border-amber-500 bg-amber-500/15 text-amber-700 dark:text-amber-300'
+            ? 'border-attention bg-attention/15 text-attention-text'
             : 'border-edge bg-surface text-transparent',
         interactive && 'hover:border-accent focus-visible:border-accent',
         !interactive && 'cursor-default'
@@ -160,7 +160,7 @@ export function StatusCheckbox({
           />
         </svg>
       ) : status === 'in_progress' ? (
-        <span className="h-2 w-2 rounded-full bg-amber-500 dark:bg-amber-400" />
+        <span className="h-2 w-2 rounded-full bg-attention" />
       ) : null}
     </button>
   );

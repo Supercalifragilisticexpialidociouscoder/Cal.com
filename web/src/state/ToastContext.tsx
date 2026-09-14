@@ -50,10 +50,10 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             className={[
               'pointer-events-auto flex w-full max-w-sm items-start gap-2.5 rounded-xl border px-3.5 py-2.5 text-sm shadow-overlay animate-toast-in',
               toast.tone === 'error'
-                ? 'border-rose-500/30 bg-rose-50 text-rose-900 dark:bg-rose-950/80 dark:text-rose-100'
+                ? 'border-transparent bg-error-wash text-error-text'
                 : toast.tone === 'info'
                   ? 'border-hairline bg-surface text-ink'
-                  : 'border-emerald-500/30 bg-emerald-50 text-emerald-900 dark:bg-emerald-950/80 dark:text-emerald-100',
+                  : 'border-transparent bg-success-wash text-success-text',
             ].join(' ')}
           >
             <span aria-hidden="true" className="mt-0.5 shrink-0">

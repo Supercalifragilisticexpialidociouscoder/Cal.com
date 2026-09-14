@@ -76,7 +76,7 @@ export function Modal({
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4">
       <div
-        className="absolute inset-0 bg-slate-900/40 animate-fade-in dark:bg-black/60"
+        className="absolute inset-0 bg-black/40 animate-fade-in dark:bg-black/70"
         onClick={onClose}
         aria-hidden="true"
       />
