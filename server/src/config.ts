@@ -34,7 +34,7 @@ export const config = {
   port: Number(process.env.PORT ?? 4000),
   sessionSecret: requiredSecret(),
   dataDir,
-  databaseFile: path.join(dataDir, 'mrtc-calendar.sqlite'),
+  databaseFile: path.join(dataDir, 'infin8-calendar.sqlite'),
   uploadsDir: path.join(dataDir, 'uploads'),
   /** Static assets of the built SPA, served by this process in production. */
   webDistDir: path.resolve(__dirname, '../../web/dist'),
@@ -43,9 +43,9 @@ export const config = {
     .map((value) => value.trim())
     .filter(Boolean),
   session: {
-    cookieName: 'mrtc_sid',
+    cookieName: 'infin8_sid',
     /** Readable (non-sensitive) hint so public visitors never call /auth/me. */
-    hintCookieName: 'mrtc_session_hint',
+    hintCookieName: 'infin8_session_hint',
     ttlMs: 1000 * 60 * 60 * 12, // 12 hours
     /** Sessions older than this much idle time are refreshed on use. */
     refreshAfterMs: 1000 * 60 * 30,
@@ -63,18 +63,18 @@ export const config = {
     superAdmin: {
       name: process.env.SEED_SUPER_ADMIN_NAME ?? 'MRTC Super Admin',
       email: (process.env.SEED_SUPER_ADMIN_EMAIL ?? 'admin@mrtc.edu').toLowerCase(),
-      password: process.env.SEED_SUPER_ADMIN_PASSWORD ?? 'mrtc-super-admin',
+      password: process.env.SEED_SUPER_ADMIN_PASSWORD ?? 'infin8-super-admin',
     },
     staff: [
       {
         name: process.env.SEED_STAFF_ONE_NAME ?? 'Staff Admin One',
         email: (process.env.SEED_STAFF_ONE_EMAIL ?? 'staff1@mrtc.edu').toLowerCase(),
-        password: process.env.SEED_STAFF_ONE_PASSWORD ?? 'mrtc-staff-one',
+        password: process.env.SEED_STAFF_ONE_PASSWORD ?? 'infin8-staff-one',
       },
       {
         name: process.env.SEED_STAFF_TWO_NAME ?? 'Staff Admin Two',
         email: (process.env.SEED_STAFF_TWO_EMAIL ?? 'staff2@mrtc.edu').toLowerCase(),
-        password: process.env.SEED_STAFF_TWO_PASSWORD ?? 'mrtc-staff-two',
+        password: process.env.SEED_STAFF_TWO_PASSWORD ?? 'infin8-staff-two',
       },
     ],
   },

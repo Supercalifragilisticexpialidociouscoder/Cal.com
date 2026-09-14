@@ -19,7 +19,7 @@ export function csrfGuard(req: Request, _res: Response, next: NextFunction): voi
   }
 
   const requestedWith = req.get('x-requested-with');
-  if (requestedWith !== 'mrtc-calendar') {
+  if (requestedWith !== 'infin8-calendar') {
     next(forbidden('This request was blocked for security reasons. Please reload the page and try again.'));
     return;
   }

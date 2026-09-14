@@ -62,7 +62,7 @@ export function verifyPassword(password: string, stored: string): boolean {
  * not exist so that login timing does not disclose which accounts are real.
  */
 export function fakeVerifyDelay(): void {
-  crypto.scryptSync('mrtc-calendar-dummy-password', 'mrtc-calendar-dummy-salt', KEY_LENGTH, {
+  crypto.scryptSync('infin8-calendar-dummy-password', 'infin8-calendar-dummy-salt', KEY_LENGTH, {
     N: SCRYPT_PARAMS.N,
     r: SCRYPT_PARAMS.r,
     p: SCRYPT_PARAMS.p,

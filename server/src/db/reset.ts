@@ -7,7 +7,7 @@ import { config } from '../config';
  */
 function reset(): void {
   if (config.isProduction) {
-    console.error('[mrtc-calendar] refusing to reset the database with NODE_ENV=production.');
+    console.error('[infin8-calendar] refusing to reset the database with NODE_ENV=production.');
     process.exit(1);
   }
 
@@ -15,16 +15,16 @@ function reset(): void {
     const file = `${config.databaseFile}${suffix}`;
     if (fs.existsSync(file)) {
       fs.rmSync(file);
-      console.log(`[mrtc-calendar] removed ${file}`);
+      console.log(`[infin8-calendar] removed ${file}`);
     }
   }
 
   if (fs.existsSync(config.uploadsDir)) {
     fs.rmSync(config.uploadsDir, { recursive: true, force: true });
-    console.log(`[mrtc-calendar] removed ${config.uploadsDir}`);
+    console.log(`[infin8-calendar] removed ${config.uploadsDir}`);
   }
 
-  console.log('[mrtc-calendar] reset complete. Start the server to seed again.');
+  console.log('[infin8-calendar] reset complete. Start the server to seed again.');
 }
 
 reset();

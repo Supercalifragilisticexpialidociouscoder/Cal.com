@@ -60,7 +60,7 @@ export function createApp(): express.Express {
   app.use('/api', attachViewer, csrfGuard);
 
   app.get('/api/health', (_req, res) => {
-    res.json({ ok: true, service: 'mrtc-calendar-api', time: new Date().toISOString() });
+    res.json({ ok: true, service: 'infin8-calendar-api', time: new Date().toISOString() });
   });
 
   app.use('/api/auth', authRouter);
@@ -114,9 +114,9 @@ function start(): void {
 
   const app = createApp();
   const server = app.listen(config.port, () => {
-    console.log(`[mrtc-calendar] API listening on http://localhost:${config.port}`);
+    console.log(`[infin8-calendar] API listening on http://localhost:${config.port}`);
     if (!config.isProduction) {
-      console.log('[mrtc-calendar] web client: http://localhost:5173');
+      console.log('[infin8-calendar] web client: http://localhost:5173');
     }
   });
 
@@ -126,7 +126,7 @@ function start(): void {
   startRateLimitCleanup();
 
   const shutdown = (signal: string) => {
-    console.log(`[mrtc-calendar] ${signal} received, shutting down.`);
+    console.log(`[infin8-calendar] ${signal} received, shutting down.`);
     server.close(() => process.exit(0));
     setTimeout(() => process.exit(0), 5000).unref();
   };

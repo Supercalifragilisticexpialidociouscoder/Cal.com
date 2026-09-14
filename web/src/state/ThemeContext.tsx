@@ -9,7 +9,7 @@ interface ThemeValue {
   setMode: (mode: ThemeMode) => void;
 }
 
-const STORAGE_KEY = 'mrtc-theme';
+const STORAGE_KEY = 'infin8-theme';
 const ThemeContext = createContext<ThemeValue | null>(null);
 
 function readStoredMode(): ThemeMode {

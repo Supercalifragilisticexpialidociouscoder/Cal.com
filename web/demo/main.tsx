@@ -19,7 +19,7 @@ import './demo.css';
 installMockApi();
 
 // The demo has no session cookie, so clear any stale hint the app looks for.
-document.cookie = 'mrtc_session_hint=; Max-Age=0; path=/';
+document.cookie = 'infin8_session_hint=; Max-Age=0; path=/';
 
 const container = document.getElementById('root');
 if (!container) throw new Error('Root element is missing');
@@ -80,13 +80,13 @@ function DemoBanner() {
             </p>
             <ul className="space-y-1 font-mono text-2xs">
               <li>
-                <span className="text-muted">Super Admin</span> &nbsp;admin@mrtc.edu &nbsp;/&nbsp; mrtc-super-admin
+                <span className="text-muted">Super Admin</span> &nbsp;admin@mrtc.edu &nbsp;/&nbsp; infin8-super-admin
               </li>
               <li>
-                <span className="text-muted">Staff Admin</span> &nbsp;staff1@mrtc.edu &nbsp;/&nbsp; mrtc-staff-one
+                <span className="text-muted">Staff Admin</span> &nbsp;staff1@mrtc.edu &nbsp;/&nbsp; infin8-staff-one
               </li>
               <li>
-                <span className="text-muted">Staff Admin</span> &nbsp;staff2@mrtc.edu &nbsp;/&nbsp; mrtc-staff-two
+                <span className="text-muted">Staff Admin</span> &nbsp;staff2@mrtc.edu &nbsp;/&nbsp; infin8-staff-two
               </li>
             </ul>
             <p className="mt-2 text-2xs text-muted">

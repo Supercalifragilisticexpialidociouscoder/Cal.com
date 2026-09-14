@@ -1,4 +1,4 @@
-# MRTC Calendar
+# Infin8 Calendar
 
 The centralized event, schedule, responsibility and planning calendar for MRTC.
 
@@ -100,9 +100,9 @@ before any real deployment.**
 
 | Role | Email | Password (default) |
 |---|---|---|
-| Super Admin | `admin@mrtc.edu` | `mrtc-super-admin` |
-| Staff Admin | `staff1@mrtc.edu` | `mrtc-staff-one` |
-| Staff Admin | `staff2@mrtc.edu` | `mrtc-staff-two` |
+| Super Admin | `admin@mrtc.edu` | `infin8-super-admin` |
+| Staff Admin | `staff1@mrtc.edu` | `infin8-staff-one` |
+| Staff Admin | `staff2@mrtc.edu` | `infin8-staff-two` |
 
 Sign in from the discreet **Admin Login** link in the footer, or at `/login`.
 Either the full email or just the part before the `@` works as the username.
@@ -116,7 +116,7 @@ A plain two-workspace monorepo. The client only ever talks to a same-origin
 the API process), so no base URL needs configuring anywhere.
 
 ```
-MRTC Calendar (React SPA)
+Infin8 Calendar (React SPA)
         ↓  /api
 Calendar API (Express + SQLite)
         ↓
@@ -173,7 +173,7 @@ today's events immediately.
 
 - The public landing page is **one request** (`/api/overview`).
 - Administration is code-split; a public visitor never downloads it.
-- A value-free `mrtc_session_hint` cookie lets the client skip the
+- A value-free `infin8_session_hint` cookie lets the client skip the
   authentication request entirely when nobody is signed in.
 - Public responses carry short `Cache-Control` lifetimes; admin responses are
   `no-store`.
@@ -239,7 +239,7 @@ keeps the page a short personal list rather than a copy of every task.
 ## API
 
 All routes are under `/api`. Mutating requests need the
-`X-Requested-With: mrtc-calendar` header.
+`X-Requested-With: infin8-calendar` header.
 
 ### Public
 
