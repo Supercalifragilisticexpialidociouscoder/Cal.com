@@ -1,0 +1,317 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   Theme tokens.
+
+   The palette, radii and interaction states follow Cal.com's design language:
+   an achromatic neutral scale, near-black as the brand colour in light and
+   white in dark, hairline borders, a 10px control radius, and a neutral
+   double-ring focus state rather than a coloured one. Values are our own
+   declarations of that language - no Cal.com code is used, and their Cal Sans
+   brand typeface is deliberately not shipped.
+
+   Colour carries meaning, never decoration: the "visualization" ramp encodes
+   where an event comes from, and the semantic ramp encodes status and
+   readiness.
+   --------------------------------------------------------------------------- */
+:root {
+  /* Surfaces */
+  --canvas: 246 247 249;
+  --surface: 255 255 255;
+  --raised: 238 239 242;
+  --emphasis: 229 231 235;
+
+  /* Borders */
+  --hairline: 229 231 235;
+  --edge: 209 213 219;
+  --edge-strong: 156 163 176;
+
+  /* Text */
+  --ink: 7 10 13;
+  --body: 60 62 68;
+  --muted: 107 114 128;
+  --faint: 156 163 176;
+
+  /* Brand: the institution's own colour, near-black like the surface it sits on */
+  --accent: 17 24 39;
+  --accent-ink: 255 255 255;
+  --accent-wash: 238 239 242;
+
+  /* Source of an event */
+  --src-institution: 17 24 39;
+  --src-institution-wash: 238 239 242;
+  --src-institution-text: 7 10 13;
+  --src-department: 66 82 255;
+  --src-department-wash: 212 227 252;
+  --src-department-text: 6 50 122;
+  --src-academic: 25 169 116;
+  --src-academic-wash: 228 247 243;
+  --src-academic-text: 18 109 52;
+  --src-club: 102 52 239;
+  --src-club-wash: 223 212 252;
+  --src-club-text: 64 6 122;
+  --src-other: 156 163 176;
+  --src-other-wash: 238 239 242;
+  --src-other-text: 107 114 128;
+  --src-deadline: 249 116 21;
+  --src-deadline-wash: 255 237 214;
+  --src-deadline-text: 124 52 3;
+
+  /* Status and readiness */
+  --success: 25 169 116;
+  --success-wash: 228 247 243;
+  --success-text: 9 103 56;
+  --attention: 249 116 21;
+  --attention-wash: 255 237 214;
+  --attention-text: 155 52 18;
+  --attention-edge: 254 214 169;
+  --error: 220 38 38;
+  --error-wash: 254 225 225;
+  --error-text: 100 23 23;
+  --error-edge: 254 200 200;
+
+  --shadow: 0 0 0;
+
+  /* Controls share one radius, as Cal.com's do. */
+  --radius-control: 10px;
+}
+
+.dark {
+  --canvas: 15 15 15;
+  --surface: 23 23 23;
+  --raised: 38 38 38;
+  --emphasis: 64 64 64;
+
+  --hairline: 38 38 38;
+  --edge: 77 77 77;
+  --edge-strong: 115 115 115;
+
+  --ink: 250 250 250;
+  --body: 212 212 212;
+  --muted: 163 163 163;
+  --faint: 122 122 122;
+
+  --accent: 255 255 255;
+  --accent-ink: 15 15 15;
+  --accent-wash: 38 38 38;
+
+  /* Dark washes follow Cal.com's *semantic* subtle values - deep, low
+     lightness tints - rather than its visualization fills, which are meant
+     for chart marks and read far too hot behind text. */
+  --src-institution: 250 250 250;
+  --src-institution-wash: 38 38 38;
+  --src-institution-text: 250 250 250;
+  --src-department: 99 128 255;
+  --src-department-wash: 5 9 46;
+  --src-department-text: 129 151 248;
+  --src-academic: 52 199 143;
+  --src-academic-wash: 4 42 23;
+  --src-academic-text: 80 195 159;
+  --src-club: 146 109 255;
+  --src-club-wash: 19 6 55;
+  --src-club-text: 175 148 249;
+  --src-other: 163 163 163;
+  --src-other-wash: 38 38 38;
+  --src-other-text: 200 200 200;
+  --src-deadline: 251 146 60;
+  --src-deadline-wash: 38 15 3;
+  --src-deadline-text: 251 146 60;
+
+  --success: 52 199 143;
+  --success-wash: 4 42 23;
+  --success-text: 80 195 159;
+  --attention: 251 146 60;
+  --attention-wash: 38 15 3;
+  --attention-text: 251 146 60;
+  --attention-edge: 103 37 15;
+  --error: 248 114 114;
+  --error-wash: 35 6 6;
+  --error-text: 248 114 114;
+  --error-edge: 100 23 23;
+
+  --shadow: 0 0 0;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-canvas text-body font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Headings carry the emphasis colour and tight tracking. */
+  h1,
+  h2,
+  h3 {
+    @apply text-ink;
+    letter-spacing: -0.011em;
+  }
+
+  /* The focus state is neutral: a light halo and a dark ring, never a brand
+     colour. It reads the same on every surface. */
+  :focus-visible {
+    @apply outline-none;
+    box-shadow:
+      0 0 0 1px rgb(var(--surface)),
+      0 0 0 3px rgb(var(--ink) / 0.16);
+  }
+
+  ::selection {
+    background-color: rgb(var(--ink) / 0.12);
+  }
+
+  /* Checkboxes and radios take the brand colour rather than the browser's
+     default blue; the engine picks a contrasting check mark for us. */
+  input[type='checkbox'],
+  input[type='radio'] {
+    accent-color: rgb(var(--accent));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-hairline bg-surface;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-2xs font-medium leading-none;
+  }
+
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-1.5 border text-sm font-medium
+           leading-none transition disabled:cursor-not-allowed disabled:opacity-30;
+    border-radius: var(--radius-control);
+  }
+
+  .btn-md {
+    @apply h-9 px-3;
+  }
+
+  .btn-sm {
+    @apply h-8 px-2.5 text-[0.8125rem];
+  }
+
+  /* The primary button's weight comes from a layered shadow with an inset
+     highlight, the way Cal.com's solid buttons are built. */
+  .btn-primary {
+    @apply border-accent bg-accent text-accent-ink;
+    box-shadow:
+      0 2px 3px 0 rgb(0 0 0 / 0.06),
+      0 1px 1px 0 rgb(0 0 0 / 0.08),
+      1px 4px 8px 0 rgb(0 0 0 / 0.12),
+      inset 0 2px 0.4px 0 rgb(255 255 255 / 0.12),
+      inset 0 -3px 2px 0 rgb(0 0 0 / 0.04);
+  }
+
+  .btn-primary:not(:disabled):hover {
+    background-color: rgb(var(--ink));
+    box-shadow:
+      0 1px 1px 0 rgb(0 0 0 / 0.1),
+      0 2px 3px 0 rgb(0 0 0 / 0.08),
+      1px 4px 8px 0 rgb(0 0 0 / 0.12),
+      inset 0 -3px 2px 0 rgb(0 0 0 / 0.1),
+      inset 0 2px 0.4px 0 rgb(255 255 255 / 0.24);
+  }
+
+  .btn-primary:not(:disabled):active {
+    box-shadow:
+      inset 0 3px 1px 0 rgb(0 0 0 / 0.1),
+      inset 0 0 2px 0 rgb(0 0 0 / 0.1);
+  }
+
+  .btn-outline {
+    @apply border-edge bg-surface text-body;
+    box-shadow:
+      0 2px 3px 0 rgb(0 0 0 / 0.03),
+      0 2px 2px -1px rgb(0 0 0 / 0.03);
+  }
+
+  .btn-outline:not(:disabled):hover {
+    @apply border-edge bg-raised text-ink;
+  }
+
+  .btn-outline:not(:disabled):active {
+    box-shadow: inset 0 2px 1px 0 rgb(0 0 0 / 0.05);
+  }
+
+  .btn-ghost {
+    @apply border-transparent bg-transparent text-muted;
+  }
+
+  .btn-ghost:not(:disabled):hover {
+    @apply bg-raised text-ink;
+  }
+
+  .btn-danger {
+    @apply border-transparent bg-error text-white;
+  }
+
+  .btn-danger:not(:disabled):hover {
+    @apply bg-error/85;
+  }
+
+  /* Inputs sit on the surface with a default border that darkens on hover and
+     focus - no colour change, matching Cal.com's neutral form language. */
+  .field {
+    @apply w-full border border-edge bg-surface px-3 py-2 text-sm font-normal text-ink
+           placeholder:text-faint;
+    border-radius: var(--radius-control);
+  }
+
+  .field:hover {
+    @apply border-edge-strong;
+  }
+
+  .field:focus {
+    @apply border-edge-strong outline-none;
+    box-shadow:
+      0 0 0 1px rgb(var(--surface)),
+      0 0 0 3px rgb(var(--ink) / 0.12);
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-xs font-medium text-ink;
+  }
+
+  /* Small uppercase labels carry structure, so they take the muted value
+     rather than the faint one - 11px at faint does not clear 4.5:1. */
+  .section-title {
+    @apply text-2xs font-semibold uppercase tracking-[0.08em] text-muted;
+  }
+
+  .scroll-slim {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--edge)) transparent;
+  }
+
+  .scroll-slim::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scroll-slim::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--edge));
+    border-radius: 9999px;
+  }
+
+  .scroll-slim::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}

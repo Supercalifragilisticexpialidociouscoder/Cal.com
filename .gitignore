@@ -1,0 +1,38 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# build output
+dist/
+build/
+web/demo-dist/
+*.tsbuildinfo
+
+# runtime data (SQLite database + uploaded files).
+# The directory contents are ignored rather than the directory itself, so the
+# .gitkeep placeholder can still be re-included below.
+server/data/*
+!server/data/.gitkeep
+
+# environment
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# editors / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# testing / coverage
+coverage/
