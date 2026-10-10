@@ -24,6 +24,37 @@ const cache = new Map<string, CacheEntry>();
  */
 const inflight = new Map<string, Promise<unknown>>();
 
+/**
+ * Mounted readers, keyed by path. A cache entry rewritten in place has to
+ * reach the components already showing it, which is what makes an optimistic
+ * update appear everywhere at once rather than only where it was clicked.
+ */
+const readers = new Map<string, Set<() => void>>();
+
+function announce(path: string): void {
+  for (const listener of readers.get(path) ?? []) listener();
+}
+
+/**
+ * Rewrites every cached entry under `prefix` without refetching.
+ *
+ * Use it for a change whose result is already known - ticking a checklist
+ * item, say. The server is still the authority: callers re-request afterwards,
+ * and `invalidate` undoes this if the request fails.
+ */
+export function patchCache<T>(prefix: string, update: (data: T) => T): void {
+  for (const [key, entry] of [...cache.entries()]) {
+    if (!key.startsWith(prefix)) continue;
+    try {
+      cache.set(key, { data: update(entry.data as T), fetchedAt: entry.fetchedAt });
+    } catch {
+      // A shape we did not expect: drop it rather than render something wrong.
+      cache.delete(key);
+    }
+    announce(key);
+  }
+}
+
 export function invalidate(prefix?: string): void {
   if (!prefix) {
     cache.clear();
@@ -36,6 +67,15 @@ export function invalidate(prefix?: string): void {
 
 export function peek<T>(path: string): T | undefined {
   return cache.get(path)?.data as T | undefined;
+}
+
+/** Every cached payload under `prefix`, for looking something up by hand. */
+export function peekAll<T>(prefix: string): T[] {
+  const found: T[] = [];
+  for (const [key, entry] of cache) {
+    if (key.startsWith(prefix)) found.push(entry.data as T);
+  }
+  return found;
 }
 
 function load<T>(path: string): Promise<T> {
@@ -133,6 +173,28 @@ export function useQuery<T>(path: string | null, options: QueryOptions = {}): Qu
       cancelled = true;
     };
   }, [path, active, reloadToken]);
+
+  // Keep in step with optimistic rewrites of this path's cache entry.
+  useEffect(() => {
+    if (!active || path === null) return;
+
+    const listener = () => {
+      const entry = cache.get(path);
+      if (entry) setData(entry.data as T);
+    };
+
+    let set = readers.get(path);
+    if (!set) {
+      set = new Set();
+      readers.set(path, set);
+    }
+    set.add(listener);
+
+    return () => {
+      set.delete(listener);
+      if (set.size === 0) readers.delete(path);
+    };
+  }, [path, active]);
 
   const reload = useCallback(() => {
     // Dropping the cached entry is what makes the effect fetch again.

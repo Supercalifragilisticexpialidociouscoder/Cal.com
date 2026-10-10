@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getDb } from '../db';
 import { logActivity } from '../lib/activity';
+import { noStore } from '../lib/cache';
 import { notFound } from '../lib/errors';
 import { findTeamConflicts } from '../lib/events';
 import { serializeQuickNote, serializeResponsibility } from '../lib/serialize';
@@ -53,7 +54,7 @@ quickNotesRouter.get(
       )
       .all(...params) as QuickNoteRow[];
 
-    res.setHeader('Cache-Control', 'no-store');
+    noStore(res);
     res.json({ notes: rows.map(serializeQuickNote) });
   })
 );

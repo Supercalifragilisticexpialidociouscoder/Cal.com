@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { ApiError, api } from '../api/client';
 import { invalidate } from '../api/useQuery';
-import type { AssigneesResponse, Conflict, Responsibility, ResponsibilityStatus } from '../api/types';
+import type { AssigneesResponse, Conflict, Responsibility } from '../api/types';
 import { cn } from '../lib/cn';
 import { formatDueAt, formatTimestamp, isPastDue } from '../lib/date';
 import { useAuth } from '../state/AuthContext';
 import { useToast } from '../state/ToastContext';
+import { useTaskToggle } from '../state/useTaskToggle';
 import { ConflictWarning } from './ConflictWarning';
 import { ConfirmDialog } from './Modal';
 import { EmptyState, FieldError, Pill, StatusCheckbox } from './ui';
@@ -34,6 +35,7 @@ export function ResponsibilityPanel({
   const { isAdmin } = useAuth();
   const { notify } = useToast();
   const [adding, setAdding] = useState(false);
+  const { toggle } = useTaskToggle();
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [removing, setRemoving] = useState<Responsibility | null>(null);
   const [busy, setBusy] = useState(false);
@@ -42,31 +44,20 @@ export function ResponsibilityPanel({
   // work has to come from the event total rather than the list length.
   const hiddenFromPublic = Math.max(0, totalCount - publicCount);
 
-  const cycleStatus = async (responsibility: Responsibility) => {
-    if (!isAdmin) return;
-    const next: ResponsibilityStatus =
-      responsibility.status === 'not_started'
-        ? 'in_progress'
-        : responsibility.status === 'in_progress'
-          ? 'completed'
-          : 'not_started';
+  /**
+   * Only the writes whose result we cannot predict lock a row. A status
+   * change is applied optimistically, so its checkbox stays live and can be
+   * clicked straight through to "completed".
+   */
+  const isBusy = (responsibilityId: number) => pendingId === responsibilityId;
 
-    setPendingId(responsibility.id);
-    try {
-      await api(`/responsibilities/${responsibility.id}`, {
-        method: 'PATCH',
-        body: { status: next },
-      });
-      invalidate('/events');
-      invalidate('/overview');
-      invalidate('/tasks');
-      onChanged();
-      if (next === 'completed') notify(`"${responsibility.title}" marked complete.`);
-    } catch (error) {
-      notify(error instanceof ApiError ? error.message : 'We could not update that task.', 'error');
-    } finally {
-      setPendingId(null);
-    }
+  const cycleStatus = (responsibility: Responsibility) => {
+    if (!isAdmin) return;
+    void toggle(responsibility.id, responsibility.status, {
+      eventId,
+      title: responsibility.title,
+      onSettled: onChanged,
+    });
   };
 
   const toggleVisibility = async (responsibility: Responsibility) => {
@@ -166,14 +157,14 @@ export function ResponsibilityPanel({
               key={responsibility.id}
               className={cn(
                 'flex items-start gap-3 py-2.5 transition-opacity',
-                pendingId === responsibility.id && 'opacity-60'
+                isBusy(responsibility.id) && 'opacity-60'
               )}
             >
               <StatusCheckbox
                 status={responsibility.status}
                 label={responsibility.title}
                 onClick={isAdmin ? () => cycleStatus(responsibility) : undefined}
-                disabled={pendingId === responsibility.id}
+                disabled={isBusy(responsibility.id)}
               />
 
               <div className="min-w-0 flex-1">
@@ -242,7 +233,7 @@ export function ResponsibilityPanel({
                   <button
                     type="button"
                     onClick={() => toggleVisibility(responsibility)}
-                    disabled={pendingId === responsibility.id}
+                    disabled={isBusy(responsibility.id)}
                     className="btn btn-sm btn-ghost px-1.5 text-2xs"
                     title={
                       responsibility.public_visibility

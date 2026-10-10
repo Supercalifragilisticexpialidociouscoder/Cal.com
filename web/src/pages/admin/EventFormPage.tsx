@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ApiError, api } from '../../api/client';
 import { invalidate, useQuery } from '../../api/useQuery';
 import type {
@@ -38,16 +38,22 @@ interface FormState {
   repeat_until: string;
 }
 
-function initialState(today: string): FormState {
+function initialState(today: string, prefill?: { date?: string; time?: string }): FormState {
+  // Clicking a day or an hour on the calendar lands here with that slot
+  // already filled in, so "add something on the 14th" is two clicks.
+  const date = /^\d{4}-\d{2}-\d{2}$/.test(prefill?.date ?? '') ? (prefill?.date as string) : today;
+  const start = /^\d{2}:\d{2}$/.test(prefill?.time ?? '') ? (prefill?.time as string) : '';
+  const end = start ? `${String(Math.min(Number(start.slice(0, 2)) + 1, 23)).padStart(2, '0')}:00` : '';
+
   return {
     title: '',
     description: '',
     event_type: 'event',
     organizer_id: '',
     organizer_name: '',
-    event_date: today,
-    start_time: '',
-    end_time: '',
+    event_date: date,
+    start_time: start,
+    end_time: end,
     all_day: false,
     location: '',
     status: 'planning',
@@ -83,6 +89,7 @@ function fromEvent(event: CalendarEvent): FormState {
 /** Create and edit share one form (spec 7). */
 export function EventFormPage() {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const isEdit = Boolean(id);
   const today = todayISO();
   const navigate = useNavigate();
@@ -94,7 +101,12 @@ export function EventFormPage() {
     { staleMs: 0 }
   );
 
-  const [form, setForm] = useState<FormState>(() => initialState(today));
+  const [form, setForm] = useState<FormState>(() =>
+    initialState(today, {
+      date: searchParams.get('date') ?? undefined,
+      time: searchParams.get('time') ?? undefined,
+    })
+  );
   const [hydrated, setHydrated] = useState(!isEdit);
   const [saving, setSaving] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});

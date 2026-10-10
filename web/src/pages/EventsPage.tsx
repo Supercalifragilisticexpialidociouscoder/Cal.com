@@ -3,8 +3,11 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { query as buildQuery } from '../api/client';
 import type { EventListResponse, MetaResponse } from '../api/types';
 import { useQuery } from '../api/useQuery';
-import { EventCard } from '../components/EventCard';
+import { useEventPeek } from '../components/EventPeek';
+import { EventListRow } from '../components/EventListRow';
 import { FilterBar, countActiveFilters, emptyFilters, type Filters } from '../components/FilterBar';
+import { CalendarIcon, PlusIcon, SearchIcon } from '../components/icons';
+import { PageHeader } from '../components/PageHeader';
 import { EmptyState, ErrorNotice, SkeletonRows, Spinner } from '../components/ui';
 import { cn } from '../lib/cn';
 import { addDays, todayISO } from '../lib/date';
@@ -58,6 +61,7 @@ export function EventsPage() {
   }, [debounced, window_, filters]);
 
   const { data: meta } = useQuery<MetaResponse>('/meta', { staleMs: 300_000 });
+  const openEvent = useEventPeek();
 
   const range = useMemo(() => {
     if (window_ === 'upcoming') return { from: today, to: undefined };
@@ -88,31 +92,27 @@ export function EventsPage() {
 
   return (
     <div className="space-y-5">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-ink">Events</h1>
-          <p className="mt-1 text-sm text-muted">
-            Every MRTC activity - institutional, academic, department and club.
-          </p>
-        </div>
-        {isAdmin && (
-          <Link to="/admin/events/new" className="btn btn-md btn-primary">
-            + Create Event
-          </Link>
-        )}
-      </header>
+      <PageHeader
+        className="mb-0"
+        title="Events"
+        description="Every Infin8 activity - institutional, academic, department and club."
+        actions={
+          isAdmin ? (
+            <Link to="/admin/events/new" className="btn btn-md btn-primary">
+              <PlusIcon className="h-4 w-4" />
+              New event
+            </Link>
+          ) : undefined
+        }
+      />
 
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative min-w-[12rem] flex-1">
-            <svg
-              viewBox="0 0 16 16"
+            <SearchIcon
               aria-hidden="true"
               className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-faint"
-            >
-              <circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" strokeWidth="1.6" />
-              <path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
+            />
             <input
               type="search"
               value={search}
@@ -159,11 +159,11 @@ export function EventsPage() {
             {total} {total === 1 ? 'event' : 'events'}
             {debounced && ` matching "${debounced}"`}
           </p>
-          <div className="grid animate-fade-in gap-2 sm:grid-cols-2">
+          <ul className="animate-fade-in divide-y divide-hairline overflow-hidden rounded-xl border border-hairline bg-surface">
             {data.events.map((event) => (
-              <EventCard key={event.id} event={event} dateStyle="absolute" />
+              <EventListRow key={event.id} event={event} open={openEvent} isAdmin={isAdmin} />
             ))}
-          </div>
+          </ul>
 
           {pageCount > 1 && (
             <nav className="flex items-center justify-between gap-3 pt-2" aria-label="Pagination">
@@ -191,6 +191,7 @@ export function EventsPage() {
         </>
       ) : (
         <EmptyState
+          icon={debounced ? SearchIcon : CalendarIcon}
           title={debounced ? `Nothing matched "${debounced}".` : 'No events to show.'}
           body={
             activeFilterCount > 0 || debounced

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode, SVGProps } from 'react';
 import { cn } from '../lib/cn';
 
 export function Pill({
@@ -42,29 +42,43 @@ export function SectionHeading({
 }
 
 /**
- * Empty states are designed, not incidental (spec 42): they say what is
- * missing and offer the next step.
+ * Empty states are designed, not incidental (spec 42): an icon to anchor the
+ * block, what is missing, and the next step. Following Cal.com, the icon sits
+ * in a soft circle rather than floating on the ground.
  */
 export function EmptyState({
   title,
   body,
   action,
   compact,
+  icon: Icon,
 }: {
   title: string;
   body?: string;
   action?: ReactNode;
   compact?: boolean;
+  icon?: ComponentType<SVGProps<SVGSVGElement>>;
 }) {
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center rounded-xl border border-dashed border-hairline bg-surface/60 text-center',
-        compact ? 'px-4 py-6' : 'px-6 py-12'
+        'flex flex-col items-center justify-center rounded-xl border border-dashed border-hairline bg-raised/30 text-center',
+        compact ? 'px-4 py-7' : 'px-6 py-14'
       )}
     >
-      <p className={cn('font-medium text-ink', compact ? 'text-sm' : 'text-base')}>{title}</p>
-      {body && <p className="mt-1 max-w-sm text-sm text-muted">{body}</p>}
+      {Icon && (
+        <span
+          aria-hidden="true"
+          className={cn(
+            'mb-3 grid place-items-center rounded-full bg-raised text-faint',
+            compact ? 'h-10 w-10' : 'h-14 w-14'
+          )}
+        >
+          <Icon className={compact ? 'h-5 w-5' : 'h-6 w-6'} />
+        </span>
+      )}
+      <p className={cn('font-semibold text-ink', compact ? 'text-sm' : 'text-base')}>{title}</p>
+      {body && <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-muted">{body}</p>}
       {action && <div className="mt-4">{action}</div>}
     </div>
   );

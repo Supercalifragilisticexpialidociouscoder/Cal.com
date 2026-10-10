@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getDb } from '../db';
 import { logActivity } from '../lib/activity';
+import { noStore } from '../lib/cache';
 import { badRequest, tooManyRequests, unauthorized } from '../lib/errors';
 import { fakeVerifyDelay, hashPassword, verifyPassword } from '../lib/password';
 import { createSession, destroyAllSessionsForUser, destroySession } from '../lib/session';
@@ -85,7 +86,7 @@ authRouter.post(
 authRouter.get(
   '/me',
   asyncRoute((req, res) => {
-    res.setHeader('Cache-Control', 'no-store');
+    noStore(res);
     res.json({ user: req.viewer ? serializeViewer(req.viewer) : null });
   })
 );

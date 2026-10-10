@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getDb } from '../db';
 import { EVENT_ORDER_BY } from '../lib/eventPresenter';
+import { noStore } from '../lib/cache';
 import { presentEvents } from '../lib/eventPresenter';
 import { serializeQuickNote } from '../lib/serialize';
 import type { EventRow, QuickNoteRow, Viewer } from '../lib/types';
@@ -22,7 +23,7 @@ searchRouter.get(
   asyncRoute((req, res) => {
     const viewer: Viewer | null = req.viewer;
     const raw = typeof req.query.q === 'string' ? req.query.q.trim() : '';
-    res.setHeader('Cache-Control', 'no-store');
+    noStore(res);
 
     if (raw.length < 2) {
       res.json({ query: raw, events: [], responsibilities: [], notes: [], organizations: [] });

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getDb } from '../db';
 import { logActivity } from '../lib/activity';
+import { noStore } from '../lib/cache';
 import { conflict, notFound } from '../lib/errors';
 import { findTeamConflicts } from '../lib/events';
 import { serializeResponsibility } from '../lib/serialize';
@@ -252,7 +253,7 @@ responsibilitiesRouter.get(
       }
     >;
 
-    res.setHeader('Cache-Control', 'no-store');
+    noStore(res);
     res.json({
       tasks: rows.map((row) => ({
         ...serializeResponsibility(row, viewer),

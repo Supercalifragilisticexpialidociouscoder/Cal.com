@@ -3,6 +3,7 @@ import { ApiError, api, query as buildQuery } from '../../api/client';
 import { invalidate, useQuery } from '../../api/useQuery';
 import type { AssigneesResponse, EventListResponse, QuickNote } from '../../api/types';
 import { ConfirmDialog, Modal } from '../../components/Modal';
+import { PageHeader } from '../../components/PageHeader';
 import { EmptyState, ErrorNotice, FieldError, Pill, SectionHeading, SkeletonRows } from '../../components/ui';
 import { cn } from '../../lib/cn';
 import { formatMediumDate, formatTimestamp, todayISO } from '../../lib/date';
@@ -103,12 +104,16 @@ export function NotesPage() {
 
   return (
     <div className="space-y-6">
-      <header>
-        <h1 className="text-xl font-semibold tracking-tight text-ink">Quick notes</h1>
-        <p className="mt-1 text-sm text-muted">
-          Private to your account. No other administrator can see these &mdash; not even the Super Admin.
-        </p>
-      </header>
+      <PageHeader
+        className="mb-0"
+        title="Quick notes"
+        description={
+          <>
+            Private to your account. No other administrator can see these &mdash; not even the Super
+            Admin.
+          </>
+        }
+      />
 
       {/* Capture first: the fastest path is typing and pressing save. */}
       <form

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getDb } from '../db';
 import { addDays, todayISO } from '../lib/dates';
+import { cacheByViewer } from '../lib/cache';
 import { EVENT_ORDER_BY, presentEvents } from '../lib/eventPresenter';
 import { buildReadiness } from '../lib/serialize';
 import { serializeResponsibility } from '../lib/serialize';
@@ -81,11 +82,9 @@ overviewRouter.get(
       important_events: presentEvents(importantRows, viewer),
     };
 
+    cacheByViewer(res, Boolean(viewer));
     if (viewer) {
-      res.setHeader('Cache-Control', 'no-store');
       payload.admin = buildAdminSummary(viewer, today);
-    } else {
-      res.setHeader('Cache-Control', 'public, max-age=30, stale-while-revalidate=120');
     }
 
     res.json(payload);
