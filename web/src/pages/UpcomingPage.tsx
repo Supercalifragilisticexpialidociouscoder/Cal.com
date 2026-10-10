@@ -3,6 +3,7 @@ import { query as buildQuery } from '../api/client';
 import type { EventListResponse } from '../api/types';
 import { useQuery } from '../api/useQuery';
 import { AgendaView } from '../components/calendar/AgendaView';
+import { PageHeader } from '../components/PageHeader';
 import { ErrorNotice, SectionHeading, SkeletonRows } from '../components/ui';
 import { addDays, formatLongDate, formatDistanceInDays, formatTime, todayISO } from '../lib/date';
 
@@ -19,12 +20,11 @@ export function UpcomingPage() {
 
   return (
     <div className="space-y-6">
-      <header>
-        <h1 className="text-xl font-semibold tracking-tight text-ink">Upcoming</h1>
-        <p className="mt-1 text-sm text-muted">
-          Everything scheduled from today through {formatLongDate(horizon)}.
-        </p>
-      </header>
+      <PageHeader
+        className="mb-0"
+        title="Upcoming"
+        description={`Everything scheduled from today through ${formatLongDate(horizon)}.`}
+      />
 
       {error && <ErrorNotice message={error.message} onRetry={reload} />}
 

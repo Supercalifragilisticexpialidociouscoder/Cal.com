@@ -10,6 +10,7 @@ import {
   weekDates,
 } from '../../lib/date';
 import { eventAccent } from '../../lib/taxonomy';
+import { peekProps, useEventPeek } from '../EventPeek';
 
 const ROW_HEIGHT = 48;
 const DEFAULT_START_HOUR = 8;
@@ -80,13 +81,17 @@ export function WeekView({
   eventsByDate,
   today,
   onSelectDay,
+  onCreateAt,
 }: {
   anchorISO: string;
   eventsByDate: Map<string, CalendarEvent[]>;
   today: string;
   onSelectDay: (dateISO: string) => void;
+  /** Admins only: clicking an empty hour starts an event at that time. */
+  onCreateAt?: (dateISO: string, time: string) => void;
 }) {
   const days = weekDates(anchorISO);
+  const peek = useEventPeek();
   const weekEvents = days.flatMap((date) => eventsByDate.get(date) ?? []);
 
   // Widen the visible hours only as far as the week's events require.
@@ -151,6 +156,7 @@ export function WeekView({
                 <Link
                   key={event.id}
                   to={`/events/${event.id}`}
+                  {...peekProps(peek, event.id)}
                   className="flex items-center gap-1 rounded-md bg-raised px-1.5 py-1 text-2xs text-ink transition-colors hover:bg-accent-wash hover:text-accent"
                   title={event.title}
                 >
@@ -166,7 +172,9 @@ export function WeekView({
         </div>
       )}
 
-      <div className="scroll-slim max-h-[34rem] overflow-y-auto">
+      {/* The hour labels sit half a line above their gridline, so the column
+          needs a little headroom or the first one is clipped. */}
+      <div className="scroll-slim max-h-[34rem] overflow-y-auto pt-2.5">
         <div className="relative grid grid-cols-[3.25rem_repeat(7,minmax(0,1fr))]">
           <div className="relative">
             {hours.map((hour) => (
@@ -184,18 +192,39 @@ export function WeekView({
             const positioned = layoutDay(eventsByDate.get(date) ?? [], startHour);
             return (
               <div key={date} className="relative border-l border-hairline">
-                {hours.map((hour) => (
-                  <div
-                    key={hour}
-                    style={{ height: ROW_HEIGHT }}
-                    className={cn('border-b border-hairline/70', date === today && 'bg-accent-wash/25')}
-                  />
-                ))}
+                {hours.map((hour) =>
+                  onCreateAt ? (
+                    <button
+                      key={hour}
+                      type="button"
+                      style={{ height: ROW_HEIGHT }}
+                      onClick={() => onCreateAt(date, `${String(hour).padStart(2, '0')}:00`)}
+                      className={cn(
+                        'group/slot w-full border-b border-hairline/70 px-1 text-left align-top transition-colors hover:bg-accent-wash/60',
+                        date === today && 'bg-accent-wash/25'
+                      )}
+                    >
+                      <span className="text-2xs font-medium text-accent opacity-0 transition group-hover/slot:opacity-100">
+                        + New
+                      </span>
+                      <span className="sr-only">
+                        New event on {date} at {String(hour).padStart(2, '0')}:00
+                      </span>
+                    </button>
+                  ) : (
+                    <div
+                      key={hour}
+                      style={{ height: ROW_HEIGHT }}
+                      className={cn('border-b border-hairline/70', date === today && 'bg-accent-wash/25')}
+                    />
+                  )
+                )}
 
                 {positioned.map(({ event, top, height, column, columns }) => (
                   <Link
                     key={event.id}
                     to={`/events/${event.id}`}
+                    {...peekProps(peek, event.id)}
                     title={`${event.title} - ${event.organizer_name}`}
                     style={{
                       top,

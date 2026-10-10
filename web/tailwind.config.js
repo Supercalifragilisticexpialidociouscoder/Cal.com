@@ -117,6 +117,14 @@ export default {
           '100%': { transform: 'scale(1)' },
         },
         'bar-grow': { from: { transform: 'scaleX(0)' }, to: { transform: 'scaleX(1)' } },
+        'slide-in-left': {
+          from: { transform: 'translateX(-100%)' },
+          to: { transform: 'translateX(0)' },
+        },
+        'slide-in-right': {
+          from: { opacity: '0', transform: 'translateX(16px)' },
+          to: { opacity: '1', transform: 'translateX(0)' },
+        },
       },
       animation: {
         'fade-in': 'fade-in 140ms ease-out both',
@@ -126,6 +134,8 @@ export default {
         'toast-in': 'toast-in 200ms cubic-bezier(0.22, 1, 0.36, 1) both',
         'check-pop': 'check-pop 220ms ease-out',
         'bar-grow': 'bar-grow 420ms cubic-bezier(0.22, 1, 0.36, 1) both',
+        'slide-in-left': 'slide-in-left 180ms cubic-bezier(0.22, 1, 0.36, 1) both',
+        'slide-in-right': 'slide-in-right 200ms cubic-bezier(0.22, 1, 0.36, 1) both',
       },
     },
   },

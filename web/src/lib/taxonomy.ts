@@ -112,10 +112,15 @@ export const READINESS_TEXT: Record<Readiness['label'], string> = {
   needs_attention: 'text-error-text',
 };
 
+/**
+ * Background classes for the small status dot beside a readiness figure.
+ * Drawn rather than written as an emoji, which renders at a different size
+ * and weight on every platform and reads as decoration next to this type.
+ */
 export const READINESS_DOT: Record<Readiness['label'], string> = {
-  ready: '\u{1F7E2}',
-  in_progress: '\u{1F7E1}',
-  needs_attention: '\u{1F534}',
+  ready: 'bg-success',
+  in_progress: 'bg-attention',
+  needs_attention: 'bg-error',
 };
 
 /** Options for the Source filter (spec 20). */

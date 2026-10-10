@@ -218,6 +218,7 @@ attachmentsRouter.get(
     );
     res.setHeader('Content-Type', 'application/octet-stream');
     res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.vary('Cookie');
     res.setHeader('Cache-Control', 'private, max-age=0, must-revalidate');
     res.sendFile(filePath);
   })

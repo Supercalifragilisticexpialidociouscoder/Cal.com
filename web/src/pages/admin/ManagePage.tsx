@@ -17,6 +17,7 @@ import {
   SectionHeading,
   SkeletonRows,
 } from '../../components/ui';
+import { PageHeader } from '../../components/PageHeader';
 import { cn } from '../../lib/cn';
 import { formatMediumDate, formatTimestamp } from '../../lib/date';
 import { SOURCE_LABELS, sourcePill } from '../../lib/taxonomy';
@@ -44,14 +45,15 @@ export function ManagePage() {
 
   return (
     <div className="space-y-5">
-      <header>
-        <h1 className="text-xl font-semibold tracking-tight text-ink">Administration</h1>
-        <p className="mt-1 text-sm text-muted">
-          {isSuperAdmin
+      <PageHeader
+        className="mb-0"
+        title="Administration"
+        description={
+          isSuperAdmin
             ? 'Organisers, venues, administrator accounts and archived events.'
-            : 'Archived events. Organiser and account management is handled by the Super Admin.'}
-        </p>
-      </header>
+            : 'Archived events. Organiser and account management is handled by the Super Admin.'
+        }
+      />
 
       <div role="tablist" aria-label="Administration sections" className="flex flex-wrap gap-1 border-b border-hairline">
         {available.map((entry) => (

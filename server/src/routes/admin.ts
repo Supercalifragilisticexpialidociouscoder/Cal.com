@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { config, MAX_STAFF_ADMINS } from '../config';
 import { getDb } from '../db';
 import { logActivity } from '../lib/activity';
+import { noStore } from '../lib/cache';
 import { badRequest, conflict, forbidden, notFound } from '../lib/errors';
 import { hashPassword } from '../lib/password';
 import { destroyAllSessionsForUser } from '../lib/session';
@@ -38,7 +39,7 @@ adminRouter.get(
 
     const activeStaff = rows.filter((row) => row.role === 'staff_admin' && row.active === 1).length;
 
-    res.setHeader('Cache-Control', 'no-store');
+    noStore(res);
     res.json({
       users: rows.map(publicUser),
       staff_admin_slots: { used: activeStaff, total: MAX_STAFF_ADMINS },
@@ -201,7 +202,7 @@ adminRouter.get(
       )
       .all() as EventRow[];
 
-    res.setHeader('Cache-Control', 'no-store');
+    noStore(res);
     res.json({ events: presentEvents(rows, viewer) });
   })
 );
@@ -224,7 +225,7 @@ adminRouter.get(
       )
       .all() as Array<Record<string, unknown>>;
 
-    res.setHeader('Cache-Control', 'no-store');
+    noStore(res);
     res.json({
       activity: rows.map((row) => ({
         ...row,
@@ -252,7 +253,7 @@ adminRouter.get(
       )
       .get() as Record<string, number>;
 
-    res.setHeader('Cache-Control', 'no-store');
+    noStore(res);
     res.json({
       counts,
       limits: {

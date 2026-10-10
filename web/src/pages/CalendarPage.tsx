@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { query as buildQuery } from '../api/client';
 import type { CalendarEvent, EventListResponse, MetaResponse } from '../api/types';
 import { useQuery } from '../api/useQuery';
@@ -8,6 +8,7 @@ import { DayView } from '../components/calendar/DayView';
 import { MonthView } from '../components/calendar/MonthView';
 import { WeekView } from '../components/calendar/WeekView';
 import { FilterBar, countActiveFilters, emptyFilters, type Filters } from '../components/FilterBar';
+import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from '../components/icons';
 import { ErrorNotice, SkeletonRows, Spinner } from '../components/ui';
 import { cn } from '../lib/cn';
 import {
@@ -20,6 +21,7 @@ import {
   startOfWeek,
   todayISO,
 } from '../lib/date';
+import { shouldIgnoreShortcut } from '../lib/keyboard';
 import { useAuth } from '../state/AuthContext';
 
 type ViewMode = 'month' | 'week' | 'day' | 'agenda';
@@ -45,6 +47,7 @@ function defaultView(): ViewMode {
 
 export function CalendarPage() {
   const [params, setParams] = useSearchParams();
+  const navigate = useNavigate();
   const { isAdmin } = useAuth();
   const today = todayISO();
 
@@ -137,6 +140,38 @@ export function CalendarPage() {
     setView('day');
   };
 
+  const createAt = (dateISO: string, time?: string) => {
+    navigate(`/admin/events/new${buildQuery({ date: dateISO, time })}`);
+  };
+
+  // The shortcuts a calendar is expected to have. Held in a ref-free closure
+  // on purpose: `view` and `anchor` must be current when a key lands.
+  useEffect(() => {
+    const onKeyDown = (keyEvent: KeyboardEvent) => {
+      if (keyEvent.metaKey || keyEvent.ctrlKey || keyEvent.altKey) return;
+      if (shouldIgnoreShortcut(keyEvent)) return;
+
+      const shortcuts: Record<string, () => void> = {
+        ArrowLeft: () => step(-1),
+        ArrowRight: () => step(1),
+        t: () => setAnchor(today),
+        m: () => setView('month'),
+        w: () => setView('week'),
+        d: () => setView('day'),
+        a: () => setView('agenda'),
+      };
+
+      const run = shortcuts[keyEvent.key] ?? shortcuts[keyEvent.key.toLowerCase()];
+      if (!run) return;
+      keyEvent.preventDefault();
+      run();
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, anchor, today]);
+
   const activeFilterCount = countActiveFilters(filters);
 
   return (
@@ -148,10 +183,16 @@ export function CalendarPage() {
             onClick={() => step(-1)}
             className="btn btn-sm btn-outline px-2"
             aria-label="Previous"
+            title="Previous (left arrow)"
           >
-            <Chevron direction="left" />
+            <ChevronLeftIcon className="h-4 w-4" />
           </button>
-          <button type="button" onClick={() => setAnchor(today)} className="btn btn-sm btn-outline">
+          <button
+            type="button"
+            onClick={() => setAnchor(today)}
+            className="btn btn-sm btn-outline"
+            title="Jump to today (T)"
+          >
             Today
           </button>
           <button
@@ -159,8 +200,9 @@ export function CalendarPage() {
             onClick={() => step(1)}
             className="btn btn-sm btn-outline px-2"
             aria-label="Next"
+            title="Next (right arrow)"
           >
-            <Chevron direction="right" />
+            <ChevronRightIcon className="h-4 w-4" />
           </button>
         </div>
 
@@ -182,6 +224,7 @@ export function CalendarPage() {
               role="tab"
               aria-selected={view === option.value}
               onClick={() => setView(option.value)}
+              title={`${option.label} view (${option.label[0]})`}
               className={cn(
                 'rounded-md px-2.5 py-1 text-[0.8125rem] font-medium transition',
                 view === option.value
@@ -210,7 +253,8 @@ export function CalendarPage() {
 
         {isAdmin && (
           <Link to="/admin/events/new" className="btn btn-sm btn-primary">
-            + Create Event
+            <PlusIcon className="h-4 w-4" />
+            New event
           </Link>
         )}
       </header>
@@ -233,10 +277,17 @@ export function CalendarPage() {
               eventsByDate={eventsByDate}
               today={today}
               onSelectDay={openDay}
+              onCreateAt={isAdmin ? createAt : undefined}
             />
           )}
           {view === 'week' && (
-            <WeekView anchorISO={anchor} eventsByDate={eventsByDate} today={today} onSelectDay={openDay} />
+            <WeekView
+              anchorISO={anchor}
+              eventsByDate={eventsByDate}
+              today={today}
+              onSelectDay={openDay}
+              onCreateAt={isAdmin ? createAt : undefined}
+            />
           )}
           {view === 'day' && (
             <DayView
@@ -273,21 +324,6 @@ export function CalendarPage() {
   );
 }
 
-function Chevron({ direction }: { direction: 'left' | 'right' }) {
-  return (
-    <svg viewBox="0 0 16 16" className="h-4 w-4" aria-hidden="true">
-      <path
-        d={direction === 'left' ? 'M10 3L5 8l5 5' : 'M6 3l5 5-5 5'}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 /** Colour is only useful if it is explained once. */
 function Legend() {
   const items = [
@@ -299,13 +335,35 @@ function Legend() {
   ];
 
   return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 px-1 text-2xs text-muted">
-      {items.map((item) => (
-        <span key={item.label} className="inline-flex items-center gap-1.5">
-          <span aria-hidden="true" className={cn('h-2 w-2 rounded-full', item.className)} />
-          {item.label}
-        </span>
-      ))}
+    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 px-1 text-2xs text-muted">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+        {items.map((item) => (
+          <span key={item.label} className="inline-flex items-center gap-1.5">
+            <span aria-hidden="true" className={cn('h-2 w-2 rounded-full', item.className)} />
+            {item.label}
+          </span>
+        ))}
+      </div>
+      <p className="hidden items-center gap-1 text-faint sm:flex">
+        <Key>&larr;</Key>
+        <Key>&rarr;</Key>
+        <span>move</span>
+        <Key>T</Key>
+        <span>today</span>
+        <Key>M</Key>
+        <Key>W</Key>
+        <Key>D</Key>
+        <Key>A</Key>
+        <span>views</span>
+      </p>
     </div>
+  );
+}
+
+function Key({ children }: { children: React.ReactNode }) {
+  return (
+    <kbd className="rounded border border-hairline bg-raised px-1 py-px font-sans text-[0.625rem] text-muted">
+      {children}
+    </kbd>
   );
 }

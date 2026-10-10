@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getDb } from '../db';
 import { listEventActivity, logActivity } from '../lib/activity';
+import { cacheByViewer, noStore } from '../lib/cache';
 import { conflict, badRequest, notFound } from '../lib/errors';
 import { expandRepeat, isValidDate, todayISO } from '../lib/dates';
 import {
@@ -112,12 +113,9 @@ eventsRouter.get(
         .get(...params) as { count: number }
     ).count;
 
-    if (!viewer) {
-      // Public calendar data is safe to cache briefly (spec 36).
-      res.setHeader('Cache-Control', 'public, max-age=30, stale-while-revalidate=120');
-    } else {
-      res.setHeader('Cache-Control', 'no-store');
-    }
+    // Public calendar data is safe to cache briefly (spec 36); an
+    // administrator's richer copy of the same URL is not.
+    cacheByViewer(res, Boolean(viewer));
 
     res.json({
       events: presentEvents(rows, viewer),
@@ -188,10 +186,8 @@ eventsRouter.get(
         .all(id) as Array<Record<string, unknown>>;
       payload.notes = noteRows;
       payload.activity = listEventActivity(id);
-      res.setHeader('Cache-Control', 'no-store');
-    } else {
-      res.setHeader('Cache-Control', 'public, max-age=30, stale-while-revalidate=120');
     }
+    cacheByViewer(res, Boolean(viewer));
 
     res.json(payload);
   })
@@ -504,7 +500,7 @@ eventsRouter.get(
     const viewer = assertAdmin(req);
     const id = Number(req.params.id);
     getEventRow(id, viewer);
-    res.setHeader('Cache-Control', 'no-store');
+    noStore(res);
     res.json({ activity: listEventActivity(id, 100) });
   })
 );

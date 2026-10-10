@@ -9,6 +9,7 @@ import {
   eventAccent,
   eventPill,
 } from '../lib/taxonomy';
+import { usePeekProps } from './EventPeek';
 import { ReadinessInline } from './ReadinessBar';
 import { Pill } from './ui';
 
@@ -28,10 +29,12 @@ export function EventCard({
   className?: string;
 }) {
   const isDeadline = event.event_type === 'deadline';
+  const peek = usePeekProps(event.id);
 
   return (
     <Link
       to={`/events/${event.id}`}
+      {...peek}
       className={cn(
         'group relative flex gap-3 overflow-hidden rounded-xl border bg-surface p-3.5 shadow-card transition-all',
         'hover:border-edge hover:shadow-raised focus-visible:border-accent',
@@ -116,9 +119,12 @@ function Separator() {
 
 /** The compact row used in the Today and Upcoming lists on the home page. */
 export function EventRow({ event }: { event: CalendarEvent }) {
+  const peek = usePeekProps(event.id);
+
   return (
     <Link
       to={`/events/${event.id}`}
+      {...peek}
       className="group flex items-start gap-3 rounded-lg px-2 py-2.5 transition-colors hover:bg-raised"
     >
       <span className="w-[4.75rem] shrink-0 pt-0.5 text-xs font-semibold tabular-nums text-muted">

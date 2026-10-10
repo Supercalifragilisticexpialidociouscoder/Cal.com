@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getDb } from '../db';
 import { logActivity } from '../lib/activity';
+import { cacheByViewer, noStore } from '../lib/cache';
 import { badRequest, conflict, notFound } from '../lib/errors';
 import { serializeOrganization } from '../lib/serialize';
 import {
@@ -76,10 +77,7 @@ metaRouter.get(
         .all() as Array<{ location: string }>
     ).map((row) => row.location);
 
-    res.setHeader(
-      'Cache-Control',
-      req.viewer ? 'no-store' : 'public, max-age=300, stale-while-revalidate=600'
-    );
+    cacheByViewer(res, Boolean(req.viewer), 300);
     res.json({
       organizations: organizations.map(serializeOrganization),
       venues: venues.map((row) => ({ id: row.id, name: row.name, active: row.active === 1 })),
@@ -122,7 +120,7 @@ metaRouter.get(
       .prepare('SELECT id, name, role FROM users WHERE active = 1 ORDER BY role DESC, name')
       .all() as Array<{ id: number; name: string; role: string }>;
 
-    res.setHeader('Cache-Control', 'no-store');
+    noStore(res);
     res.json({
       teams: [...new Set([...organizations, ...usedTeams])].sort((a, b) => a.localeCompare(b)),
       admins: admins.map((admin) => ({
